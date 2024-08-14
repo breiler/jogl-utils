@@ -167,7 +167,7 @@ public class Material {
     }
     /**
      * Sets the state on the attached OpenGL Context to match this Material.
-     * @throws sddm.lighting.LightingException if no OpenGL Context is attached.
+     * @throws net.java.joglutils.lighting.LightingException if no OpenGL Context is attached.
      */
     public void apply() throws LightingException {
         if (attachedGL == null)
@@ -176,7 +176,7 @@ public class Material {
     }
     /**
      * Sets this Material object from the attached OpenGL state.
-     * @throws sddm.lighting.LightingException if no OpenGL Context is attached.
+     * @throws net.java.joglutils.lighting.LightingException if no OpenGL Context is attached.
      */
     public void retrieve() throws LightingException {
         if (attachedGL == null)
@@ -187,7 +187,7 @@ public class Material {
      * Specifies the face for subsequent apply method calls to apply and retrieve the material settings.  If
      * GL_FRONT_AND_BACK, will retrieve from GL_FRONT.
      * @param face the face to apply material settings upon.  Must be GL2.GL_FRONT_AND_BACK, GL2.GL_FRONT, or GL2.GL_BACK
-     * @throws sddm.lighting.LightingException if an invalid input is provided
+     * @throws net.java.joglutils.lighting.LightingException if an invalid input is provided
      */
     public void setFace(final int face) throws LightingException {
         if(face==GL.GL_FRONT_AND_BACK)
@@ -300,7 +300,7 @@ public class Material {
     /**
      * Sets the light model parameter GL_LIGHT_MODEL_AMBIENT for the attached GL context. This applies for all lighted fragments on this GL context.
      * @param ambient the ambient color to be applied.
-     * @throws sddm.lighting.LightingException if no OpenGL Context is attached.
+     * @throws net.java.joglutils.lighting.LightingException if no OpenGL Context is attached.
      */
     public void applyGlobalAmbient(final Color ambient) throws LightingException {
         if (this.attachedGL == null)
@@ -309,7 +309,7 @@ public class Material {
     }
     /**
      * Retrieves the GL_LIGHT_MODEL_AMBIENT color from the attached OpenGL context.
-     * @throws sddm.lighting.LightingException if no OpenGL Context is attached.
+     * @throws net.java.joglutils.lighting.LightingException if no OpenGL Context is attached.
      * @return the ambient color in the specified OpenGL Context.
      */
     public Color getGlobalAmbient() throws LightingException {

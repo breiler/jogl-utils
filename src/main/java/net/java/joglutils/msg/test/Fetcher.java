@@ -35,12 +35,12 @@ import java.awt.image.BufferedImage;
 /** 
  * Defines how elements in the ListModel associated with the
  * ImageBrowser are converted into images that can be rendered
- * on-screen. <P>
+ * on-screen.
  * 
  * The IDENT type is the client's identifier for a particular image
  * which is used in operations like progress callbacks. For example,
  * this might be the index into the ListModel of the image we're
- * talking about. <P>
+ * talking about.
  *
  * @author Jasper Potts
  * @author Kenneth Russell

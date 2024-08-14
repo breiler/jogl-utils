@@ -72,7 +72,6 @@ import com.jogamp.opengl.math.VectorUtil;
  *
  * @author Davide Raccagni
  * @author Erik Tollerud
- * @created January 29, 2004
  */
 public class TextRenderer3D
 {
@@ -199,8 +198,6 @@ public class TextRenderer3D
 
 	/**
 	 * Get the current flatness to which the glyph's curves will be flattened
-	 *
-	 * @return
 	 */
 	public void setFlatness(final float flatness)
 	{

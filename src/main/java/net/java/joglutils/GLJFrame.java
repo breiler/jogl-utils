@@ -545,14 +545,12 @@ public class GLJFrame extends JFrame {
     /**
      * Gets the GL pipeline for the canvas in this GLJPane.
      * @return the GL pipeline associated with this GLCanvas
-     * @see javax.media.opengl.GLCanvas#getGL()
      */
     public GL getGL() {
         return ((GLCanvas)mainCanvas).getGL();
     }
     /**
      *  Sets the GL pipeline for the canvas in this GLJPane.
-     * @see javax.media.opengl.GLCanvas#setGL(javax.media.opengl.GL)
      * @param gl The pipeline to attach to this GLCanvas
      */
     public void setGL(final GL gl) {
@@ -560,7 +558,6 @@ public class GLJFrame extends JFrame {
     }
     /**
      * Retrieves the GLContext associated with the GLCanvas on this GLJFrame
-     * @see javax.media.opengl.GLCanvas#getContext()
      * @return the associated GLContext
      */
     public GLContext getContext() {

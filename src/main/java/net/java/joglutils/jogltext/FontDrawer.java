@@ -59,7 +59,6 @@ import com.jogamp.opengl.glu.GLUtessellatorCallbackAdapter;
  *
  *@author     Davide Raccagni
  *@author     Erik Tollerud
- *@created    January 29, 2004
  */
 public class FontDrawer {
 

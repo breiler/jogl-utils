@@ -77,7 +77,7 @@ public class Color4 extends Node {
   public static final int AMBIENT_AND_DIFFUSE = 5;
 
   public void setColorBinding(int colorBinding) {
-    if (binding < EMISSION || binding > AMBIENT_AND_DIFFUSE) {
+    if (binding &lt; EMISSION || binding &gt; AMBIENT_AND_DIFFUSE) {
       throw new IllegalArgumentException("Illegal color binding " + binding);
     }
     this.colorBinding = colorBinding;

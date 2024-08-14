@@ -3,7 +3,6 @@ package net.java.joglutils.model.geometry;
 /**
  * Provides a instance of a boundary object that stores the maximum and 
  * minimum extents of a bounding box in 3D space.
- * <p>
  *
  * @version $Id$
  */
