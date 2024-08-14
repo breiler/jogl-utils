@@ -8,7 +8,7 @@
     <groupId>com.breiler</groupId>
     <artifactId>msg</artifactId>
     <description>The Minimal Scene Graph (MSG)</description>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <url>https://github.com/breiler/msg</url>
     <scm>
         <url>git@github.com:breiler/msg.git</url>
@@ -54,11 +54,6 @@
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
             <version>${jogl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swing-layout</artifactId>
-            <version>1.0.3</version>
         </dependency>
     </dependencies>
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>The Minimal Scene Graph (MSG)</title>
+</head>
+<body>
+<p>
+    The Minimal Scene Graph (MSG) is a small, lightweight 3D scene graph
+    library layered on top of the <a href="https://jogamp.org/jogl/">Java OpenGL API</a> (JOGL).
+    MSG is heavily inspired by the Open Inventor(tm) library developed by
+    Silicon Graphics, Inc. and derives most of its concepts and internal structure from this library,
+    which was released in open-source form in 2000. Many implementation
+    decisions were informed by studying the Open Inventor source code.
+</p>
+<p>
+    MSG is more free-form in style than many contemporary scene graphs.
+    The traversal order of the scene graph is significant, and occurs in
+    top-down, left-to-right order. Nodes placed in the scene graph affect
+    the global state when they are traversed. When geometry is rendered,
+    it acquires its visual characteristics from the current settings in
+    the global state. Actions are applied to nodes to cause operations
+    such as rendering.
+</p>
+<p>
+    Group nodes collect children nodes underneath them, but have no effect
+    on the global state, which propagates both upward and downward through
+    them. Separator nodes, which are a subclass of Group, prevent state
+    changes underneath them from propagating out and affecting nodes which
+    follow them in the graph. This allows them to be used as an effective
+    means of collecting reusable pieces of scene graph structure. Global
+    state propagates downward through Separators.
+</p>
+<p>
+    The current set of nodes is minimal (as indicated by the name of the
+    library) and the current set of actions is incomplete.
+</p>
+<p>
+    This library is based on <a href="https://https://github.com/sgothel/jogl-utils/">jogl-utils</a> but has been
+    streamlined to only include the scene graph components.
+</p>
+</body>
+</html>
