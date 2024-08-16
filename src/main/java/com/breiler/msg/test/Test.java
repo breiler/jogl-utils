@@ -38,19 +38,25 @@
 package com.breiler.msg.test;
 
 import java.awt.Frame;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.breiler.msg.actions.GLRenderAction;
+import com.breiler.msg.actions.RayPickAction;
 import com.breiler.msg.collections.Vec2fCollection;
 import com.breiler.msg.collections.Vec3fCollection;
 import com.breiler.msg.collections.Vec4fCollection;
-import com.breiler.msg.math.Vec2f;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.math.Vec4f;
+import com.breiler.msg.misc.PickedPoint;
 import com.breiler.msg.nodes.Color4;
 import com.breiler.msg.nodes.Coordinate3;
-import com.breiler.msg.nodes.Separator;
+import com.breiler.msg.nodes.Group;
 import com.breiler.msg.nodes.TextureCoordinate2;
 import com.breiler.msg.nodes.Transform;
 import com.breiler.msg.nodes.TriangleSet;
@@ -61,33 +67,36 @@ import com.jogamp.opengl.awt.GLCanvas;
 
 import com.breiler.msg.nodes.PerspectiveCamera;
 
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector4f;
+
 /** A very basic test of the Minimal Scene Graph library. */
 
 public class Test {
+  private static GLCanvas canvas;
+
   public static void main(final String[] args) {
     final Frame frame = new Frame("Minimal Scene Graph (MSG) Test");
-    final GLCanvas canvas = new GLCanvas();
+    canvas = new GLCanvas();
     canvas.addGLEventListener(new Listener());
     frame.add(canvas);
     frame.setSize(512, 512);
     frame.setVisible(true);
     frame.addWindowListener(new WindowAdapter() {
         public void windowClosing(final WindowEvent e) {
-          new Thread(new Runnable() {
-              public void run() {
-                System.exit(0);
-              }
-            }).start();
+          new Thread(() -> System.exit(0)).start();
         }
       });
+
+
   }
 
   static class Listener implements GLEventListener {
-    private Separator root;
+    private Group root;
     private GLRenderAction renderAction;
 
     public void init(final GLAutoDrawable drawable) {
-      root = new Separator();
+      root = new Group();
       final PerspectiveCamera cam = new PerspectiveCamera();
       cam.setPosition(new Vec3f(0, 0, 2));
       root.addChild(cam);
@@ -108,13 +117,13 @@ public class Test {
       final TextureCoordinate2 texCoordNode = new TextureCoordinate2();
       final Vec2fCollection texCoords = new Vec2fCollection();
       // First triangle
-      texCoords.add(new Vec2f( 1,  1));
-      texCoords.add(new Vec2f( 0,  1));
-      texCoords.add(new Vec2f( 0,  0));
+      texCoords.add(new Vector2f( 1,  1));
+      texCoords.add(new Vector2f( 0,  1));
+      texCoords.add(new Vector2f( 0,  0));
       // Second triangle
-      texCoords.add(new Vec2f( 1,  1));
-      texCoords.add(new Vec2f( 0,  0));
-      texCoords.add(new Vec2f( 1,  0));
+      texCoords.add(new Vector2f( 1,  1));
+      texCoords.add(new Vector2f( 0,  0));
+      texCoords.add(new Vector2f( 1,  0));
       texCoordNode.setData(texCoords);
       root.addChild(texCoordNode);
 
@@ -122,18 +131,17 @@ public class Test {
       final Color4 colorNode = new Color4();
       final Vec4fCollection colors = new Vec4fCollection();
       // First triangle
-      colors.add(new Vec4f(1.0f, 1.0f, 1.0f, 1.0f));
-      colors.add(new Vec4f(1.0f, 1.0f, 1.0f, 1.0f));
-      colors.add(new Vec4f(0.0f, 0.0f, 0.0f, 0.0f));
+      colors.add(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
+      colors.add(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
+      colors.add(new Vector4f(0.0f, 0.0f, 0.0f, 0.0f));
       // Second triangle
-      colors.add(new Vec4f(1.0f, 1.0f, 1.0f, 1.0f));
-      colors.add(new Vec4f(0.0f, 0.0f, 0.0f, 0.0f));
-      colors.add(new Vec4f(0.0f, 0.0f, 0.0f, 0.0f));
+      colors.add(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
+      colors.add(new Vector4f(0.0f, 0.0f, 0.0f, 0.0f));
+      colors.add(new Vector4f(0.0f, 0.0f, 0.0f, 0.0f));
       colorNode.setData(colors);
       root.addChild(colorNode);
 
       final TriangleSet tris = new TriangleSet();
-      tris.setNumTriangles(2);
       root.addChild(tris);
 
       // Testing transforms
@@ -148,6 +156,18 @@ public class Test {
       gl.glEnable(GL.GL_DEPTH_TEST);
 
       renderAction = new GLRenderAction();
+
+      canvas.addMouseListener(new MouseAdapter() {
+        RayPickAction ra = new RayPickAction();
+
+        public void mousePressed(final MouseEvent e) {
+          ra.setPoint(e.getX(), e.getY(), e.getComponent());
+          // Apply to the scene root
+          ra.apply(root);
+          final List<PickedPoint> pickedPoints = ra.getPickedPoints();
+          System.out.println(pickedPoints.stream().map(s -> "[" + s.getPath().stream().map(Objects::toString).collect(Collectors.joining(", ")) + "]").collect(Collectors.joining(", ")));
+        }
+      });
     }
 
     public void display(final GLAutoDrawable drawable) {

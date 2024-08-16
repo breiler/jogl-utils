@@ -49,10 +49,13 @@ import com.breiler.msg.elements.ViewingMatrixElement;
 import com.breiler.msg.math.Line;
 import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.Rotf;
-import com.breiler.msg.math.SingularMatrixException;
-import com.breiler.msg.math.Vec2f;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.math.Vec4f;
+
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a camera which is used to view the scene. The camera
@@ -78,6 +81,11 @@ public abstract class Camera extends Node {
         ViewingMatrixElement.enable(RayPickAction.getDefaultState());
     }
 
+    private final Set<CameraListener> cameraListeners = ConcurrentHashMap.newKeySet();
+
+    public void addCameraListener(CameraListener cameraListener) {
+        cameraListeners.add(cameraListener);
+    }
     private final Vec3f position;
     private final Rotf orientation;
     protected boolean projDirty;
@@ -112,6 +120,7 @@ public abstract class Camera extends Node {
     public void setPosition(Vec3f position) {
         this.position.set(position);
         viewDirty = true;
+        cameraListeners.forEach(CameraListener::positionChanged);
     }
 
     /**
@@ -127,6 +136,7 @@ public abstract class Camera extends Node {
     public void setOrientation(Rotf orientation) {
         this.orientation.set(orientation);
         viewDirty = true;
+        cameraListeners.forEach(CameraListener::positionChanged);
     }
 
     /**
@@ -146,6 +156,7 @@ public abstract class Camera extends Node {
             return;
         this.aspectRatio = aspectRatio;
         projDirty = true;
+        cameraListeners.forEach(CameraListener::positionChanged);
     }
 
     /**
@@ -165,6 +176,7 @@ public abstract class Camera extends Node {
     public void setNearDistance(float nearDistance) {
         this.nearDistance = nearDistance;
         projDirty = true;
+        cameraListeners.forEach(CameraListener::positionChanged);
     }
 
     /**
@@ -184,6 +196,7 @@ public abstract class Camera extends Node {
     public void setFarDistance(float farDistance) {
         this.farDistance = farDistance;
         projDirty = true;
+        cameraListeners.forEach(CameraListener::positionChanged);
     }
 
     /**
@@ -210,7 +223,7 @@ public abstract class Camera extends Node {
      */
     public Mat4f getViewingMatrix() {
         if (viewDirty) {
-            viewMatrix.makeIdent();
+            viewMatrix.setIdentity();
             viewDirty = false;
 
             viewMatrix.setRotation(getOrientation());
@@ -234,7 +247,7 @@ public abstract class Camera extends Node {
      * is the upper-right. Allocates new storage for the returned
      * Line.
      */
-    public Line unproject(Vec2f point) {
+    public Line unproject(Vector2f point) {
         Line line = new Line();
         unproject(point, line);
         return line;
@@ -247,15 +260,15 @@ public abstract class Camera extends Node {
      * in normalized coordinates, where (0, 0) is the lower-left corner
      * of the viewport and (1, 1) is the upper-right.
      */
-    public void unproject(Vec2f point, Line line) throws SingularMatrixException {
+    public void unproject(Vector2f point, Line line) throws CameraException {
         // First, we are going to compute the 3D point which corresponds
         // to the given point on the near plane. Map the screen
         // coordinates to the (-1, 1) range. Note that because the camera
         // points down the -Z axis, we use as the initial Z coordinate of
         // the 3D point we need to unproject the negation of the near
         // distance.
-        Vec4f pt3d = new Vec4f(2 * point.x() - 1,
-                2 * point.y() - 1,
+        Vec4f pt3d = new Vec4f(2 * point.getX() - 1,
+                2 * point.getY() - 1,
                 -getNearDistance(),
                 1);
         // Compute the cumulative view and projection matrices
@@ -266,15 +279,15 @@ public abstract class Camera extends Node {
         // Multiply
         Vec4f unproj = new Vec4f();
         mat.xformVec(pt3d, unproj);
-        if (unproj.w() == 0) {
+        if (unproj.getW() == 0) {
             // FIXME: is this the right exception to throw in this case?
-            throw new SingularMatrixException();
+            throw new CameraException();
         }
-        float ooW = 1.0f / unproj.w();
-        Vec3f to = new Vec3f(unproj.x() * ooW,
-                unproj.y() * ooW,
-                unproj.z() * ooW);
-        Vec3f from = getRayStartPoint(point, to);
+        float ooW = 1.0f / unproj.getW();
+        Vec3f to = new Vec3f(unproj.getX() * ooW,
+                unproj.getY() * ooW,
+                unproj.getZ() * ooW);
+        Vector3f from = getRayStartPoint(point, to);
         Vec3f dir = to.minus(from);
 
         //    System.err.println("unprojected point: " + to);
@@ -289,9 +302,10 @@ public abstract class Camera extends Node {
      * normalized screen coordinates ((0, 0) to (1, 1)) and a 3D point
      * which that point unprojects to.
      */
-    protected abstract Vec3f getRayStartPoint(Vec2f point, Vec3f unprojectedPoint);
+    protected abstract Vec3f getRayStartPoint(Vector2f point, Vec3f unprojectedPoint);
 
     public void doAction(Action action) {
+
         if (ViewingMatrixElement.isEnabled(action.getState())) {
             ViewingMatrixElement.set(action.getState(), getViewingMatrix());
         }

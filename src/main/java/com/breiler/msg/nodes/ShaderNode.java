@@ -55,8 +55,8 @@ public class ShaderNode extends Node {
   private String vertexShaderCode;
   private String fragmentShaderCode;
   private Shader shader;
-  private final List<Shader> disposedShaders = new ArrayList<Shader>();
-  private final Map<String, Params> paramMap = new HashMap<String, Params>();
+  private final List<Shader> disposedShaders = new ArrayList<>();
+  private final Map<String, Params> paramMap = new HashMap<>();
 
   static {
     // Enable the elements this node affects for known actions

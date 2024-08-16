@@ -44,12 +44,13 @@ import java.util.Collections;
 import java.util.List;
 
 import com.breiler.msg.math.Line;
-import com.breiler.msg.math.Vec2f;
 import com.breiler.msg.misc.ActionTable;
 import com.breiler.msg.misc.PickedPoint;
 import com.breiler.msg.misc.State;
 import com.breiler.msg.nodes.Camera;
 import com.breiler.msg.nodes.Node;
+
+import javax.vecmath.Vector2f;
 
 public class RayPickAction extends Action {
   // Boilerplate
@@ -88,7 +89,7 @@ public class RayPickAction extends Action {
   }
 
   private int applyDepth = 0;
-  private Vec2f normalizedPoint;
+  private Vector2f normalizedPoint;
   private Line ray;
 
   private Line computedRay;
@@ -137,14 +138,14 @@ public class RayPickAction extends Action {
   /** Sets the point for this RayPickAction based on x and y
       coordinates relative to the specified AWT Component. */
   public void setPoint(int x, int y, Component component) {
-    setNormalizedPoint(new Vec2f((float) x / (float) component.getWidth(),
+    setNormalizedPoint(new Vector2f((float) x / (float) component.getWidth(),
                                  1.0f - ((float) y / (float) component.getHeight())));
   }
 
   /** Sets the normalized point for this RayPickAction, where x and y
       are relative to the lower-left of the viewport and range from
       [0..1]. */
-  public void setNormalizedPoint(Vec2f normalizedPoint) {
+  public void setNormalizedPoint(Vector2f normalizedPoint) {
     this.normalizedPoint = normalizedPoint;
     ray = null;
     computedRay = null;

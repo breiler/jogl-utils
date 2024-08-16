@@ -37,9 +37,11 @@
 
 package com.breiler.msg.misc;
 
-import com.breiler.msg.math.Vec2f;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.math.Vec4f;
+
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector4f;
 
 /** Represents a vertex on a primitive, including pieces of relevant
     information such as location, surface normal and texture
@@ -47,8 +49,8 @@ import com.breiler.msg.math.Vec4f;
 
 public class PrimitiveVertex implements Cloneable {
   private Vec3f coord;
-  private Vec2f texCoord;
-  private Vec4f color;
+  private Vector2f texCoord;
+  private Vector4f color;
   private Vec3f normal;
 
   public PrimitiveVertex() {}
@@ -60,10 +62,10 @@ public class PrimitiveVertex implements Cloneable {
         vtx.setCoord(new Vec3f(coord));
       }
       if (texCoord != null) {
-        vtx.setTexCoord(new Vec2f(texCoord));
+        vtx.setTexCoord(new Vector2f(texCoord));
       }
       if (color != null) {
-        vtx.setColor(new Vec4f(color));
+        vtx.setColor(new Vector4f(color));
       }
       if (normal != null) {
         vtx.setNormal(new Vec3f(normal));
@@ -86,14 +88,14 @@ public class PrimitiveVertex implements Cloneable {
   public Vec3f getCoord()                  { return coord;       }
 
   /** Sets the texture coordinate in this PrimitiveVertex. Refers to the passed vector by reference. */
-  public void  setTexCoord(Vec2f texCoord) { this.texCoord = texCoord; }
+  public void  setTexCoord(Vector2f texCoord) { this.texCoord = texCoord; }
   /** Returns the texture coordinate in this PrimitiveVertex, or null if it is not known. */
-  public Vec2f getTexCoord()               { return texCoord;          }
+  public Vector2f getTexCoord()               { return texCoord;          }
 
   /** Sets the color in this PrimitiveVertex. Refers to the passed vector by reference. */
-  public void  setColor(Vec4f color)       { this.color = color; }
+  public void  setColor(Vector4f color)       { this.color = color; }
   /** Returns the color in this PrimitiveVertex, or null if it is not known. */
-  public Vec4f getColor()                  { return color;       }
+  public Vector4f getColor()                  { return color;       }
 
   /** Sets the normal in this PrimitiveVertex. Refers to the passed vector by reference. */
   public void  setNormal(Vec3f normal)     { this.normal = normal; }

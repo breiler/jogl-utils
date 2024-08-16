@@ -39,8 +39,9 @@ package com.breiler.msg.nodes;
 
 import com.breiler.msg.actions.GLRenderAction;
 import com.breiler.msg.math.Mat4f;
-import com.breiler.msg.math.Vec2f;
 import com.breiler.msg.math.Vec3f;
+
+import javax.vecmath.Vector2f;
 
 /** Represents a camera utilizing a perspective projection. <P>
 
@@ -56,7 +57,7 @@ public class PerspectiveCamera extends Camera {
   
   public Mat4f getProjectionMatrix() {
     if (projDirty) {
-      projMatrix.makeIdent();
+      projMatrix.setIdentity();
       projDirty = false;
 
       // Recompute matrix based on current parameters
@@ -107,7 +108,7 @@ public class PerspectiveCamera extends Camera {
     return getWidthAngle(getAspectRatio());
   }
 
-  protected Vec3f getRayStartPoint(Vec2f point, Vec3f unprojectedPoint) {
+  protected Vec3f getRayStartPoint(Vector2f point, Vec3f unprojectedPoint) {
     return getPosition();
   }
 

@@ -40,7 +40,8 @@ package com.breiler.msg.collections;
 import java.nio.FloatBuffer;
 
 import com.breiler.msg.impl.BufferFactory;
-import com.breiler.msg.math.Vec2f;
+
+import javax.vecmath.Vector2f;
 
 /** Provides the abstraction of a collection of Vec2f objects while
     allowing access to the backing store in the form of a direct
@@ -72,19 +73,19 @@ public class Vec2fCollection {
 
   /** Stores the given Vec2f at the given index. If the collection has
       not grown to the given size, throws an exception. */
-  public void set(int index, Vec2f value) throws IndexOutOfBoundsException {
+  public void set(int index, Vector2f value) throws IndexOutOfBoundsException {
     if (index >= size()) {
       throw new IndexOutOfBoundsException(index + " >= " + size());
     }
     int base = index * ELEMENT_SIZE;
     FloatBuffer buf = data;
-    buf.put(base,     value.x());
-    buf.put(base + 1, value.y());
+    buf.put(base,     value.getX());
+    buf.put(base + 1, value.getY());
   }
 
   /** Fetches the Vec2f at the given index. If the collection has not
       grown to the given size, throws an exception. */
-  public Vec2f get(int index) throws IndexOutOfBoundsException {
+  public Vector2f get(int index) throws IndexOutOfBoundsException {
     if (index >= size()) {
       throw new IndexOutOfBoundsException(index + " >= " + size());
     }
@@ -93,12 +94,12 @@ public class Vec2fCollection {
     // is an issue. However, escape analysis should eventually take
     // care of this.
     FloatBuffer buf = data;
-    return new Vec2f(buf.get(base), buf.get(base + 1));
+    return new Vector2f(buf.get(base), buf.get(base + 1));
   }
 
   /** Adds the given Vec2f to this collection, expanding it if
       necessary. */
-  public void add(Vec2f value) {
+  public void add(Vector2f value) {
     FloatBuffer buf = data;
     if (buf.limit() == buf.capacity()) {
       FloatBuffer newBuf = BufferFactory.newFloatBuffer(Math.max(buf.capacity() + ELEMENT_SIZE,
@@ -111,19 +112,19 @@ public class Vec2fCollection {
     }
     int pos = buf.limit();
     buf.limit(pos + ELEMENT_SIZE);
-    buf.put(pos,     value.x());
-    buf.put(pos + 1, value.y());
+    buf.put(pos,     value.getX());
+    buf.put(pos + 1, value.getY());
   }
 
   /** Removes the given Vec2f from this collection. Moves all Vec2fs
       above it down one slot. */
-  public Vec2f remove(int index) throws IndexOutOfBoundsException {
+  public Vector2f remove(int index) throws IndexOutOfBoundsException {
     if (index >= size()) {
       throw new IndexOutOfBoundsException(index + " >= " + size());
     }
     FloatBuffer buf = data;
     int pos = index * ELEMENT_SIZE;
-    Vec2f res = new Vec2f(buf.get(pos), buf.get(pos + 1));
+    Vector2f res = new Vector2f(buf.get(pos), buf.get(pos + 1));
     if (index == size() - 1) {
       // Simply lower the limit
       buf.limit(buf.limit() - ELEMENT_SIZE);

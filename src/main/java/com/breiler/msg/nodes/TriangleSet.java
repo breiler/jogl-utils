@@ -37,8 +37,6 @@
 
 package com.breiler.msg.nodes;
 
-import java.nio.FloatBuffer;
-
 import com.breiler.msg.actions.Action;
 import com.breiler.msg.actions.GLRenderAction;
 import com.breiler.msg.elements.ColorElement;
@@ -46,7 +44,6 @@ import com.breiler.msg.elements.CoordinateElement;
 import com.breiler.msg.elements.TextureCoordinateElement;
 import com.breiler.msg.elements.TextureElement;
 import com.breiler.msg.math.Mat4f;
-import com.breiler.msg.math.Vec2f;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.PrimitiveVertex;
@@ -59,189 +56,162 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
-/** A TriangleSet assembles the coordinates specified by a Coordinate3
-    node, and any auxiliary nodes such as a TextureCoordinate2 node,
-    into a set of triangles. */
+import javax.vecmath.Vector2f;
+import java.nio.FloatBuffer;
+
+/**
+ * A TriangleSet assembles the coordinates specified by a Coordinate3
+ * node, and any auxiliary nodes such as a TextureCoordinate2 node,
+ * into a set of triangles.
+ */
 
 public class TriangleSet extends TriangleBasedShape {
-  private int numTriangles;
+    // Helper routine for setting up a texture matrix to allow texture
+    // coords in the scene graph to always be specified from (0..1)
+    private final Mat4f textureMatrix = new Mat4f();
 
-  /** Sets the number of triangles this TriangleSet references. */
-  public void setNumTriangles(final int numTriangles) {
-    this.numTriangles = numTriangles;
-  }
-
-  /** Returns the number of triangles this TriangleSet references. */
-  public int getNumTriangles() {
-    return numTriangles;
-  }
-
-  public void render(final GLRenderAction action) {
-    final State state = action.getState();
-    if (!CoordinateElement.isEnabled(state))
-      return;
-
-    if (CoordinateElement.get(state) != null) {
-      // OK, we have coordinates to send down, at least
-
-      final GL2 gl = action.getGL();
-
-      Texture tex = null;
-      boolean haveTexCoords = false;
-
-      if (TextureElement.isEnabled(state) &&
-          TextureCoordinateElement.isEnabled(state)) {
-        final Texture2 texNode = TextureElement.get(state);
-        if (texNode != null) {
-          tex = texNode.getTexture(gl);
+    public void render(final GLRenderAction action) {
+        final State state = action.getState();
+        if (!CoordinateElement.isEnabled(state) || CoordinateElement.get(state) == null) {
+            return;
         }
-        haveTexCoords = (TextureCoordinateElement.get(state) != null);
-      }
 
-      if (tex != null) {
-        // Set up the texture matrix to uniformly map [0..1] to the used
-        // portion of the texture image
-        gl.glMatrixMode(GL.GL_TEXTURE);
-        gl.glPushMatrix();
-        if (gl.isExtensionAvailable("GL_VERSION_1_3")) {
-            gl.glLoadTransposeMatrixf(getTextureMatrix(tex).getRowMajorData(), 0);
-        } else {
-            final float[] tmp = new float[16];
-            getTextureMatrix(tex).getColumnMajorData(tmp);
-            gl.glLoadMatrixf(tmp, 0);
+        // OK, we have coordinates to send down, at least
+
+        final GL2 gl = action.getGL();
+
+        Texture tex = null;
+        boolean haveTexCoords = false;
+
+        if (TextureElement.isEnabled(state) && TextureCoordinateElement.isEnabled(state)) {
+            final Texture2 texNode = TextureElement.get(state);
+            if (texNode != null) {
+                tex = texNode.getTexture(gl);
+            }
+            haveTexCoords = (TextureCoordinateElement.get(state) != null);
         }
-        gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-      } else if (haveTexCoords) {
-        // Want to turn off the use of texture coordinates to avoid errors
-        // FIXME: not 100% sure whether we need to do this, but think we should
-        gl.glDisableClientState(GLPointerFunc.GL_TEXTURE_COORD_ARRAY);
-      }
 
-      // For now, assume the triangle set and the number of available
-      // coordinates match -- may want to add debugging information
-      // for this later
-      gl.glDrawArrays(GL.GL_TRIANGLES, 0, 3 * getNumTriangles());
+        if (tex != null) {
+            // Set up the texture matrix to uniformly map [0..1] to the used
+            // portion of the texture image
+            gl.glMatrixMode(GL.GL_TEXTURE);
+            gl.glPushMatrix();
+            if (gl.isExtensionAvailable("GL_VERSION_1_3")) {
+                gl.glLoadTransposeMatrixf(getTextureMatrix(tex).getRowMajorData(), 0);
+            } else {
+                final float[] tmp = new float[16];
+                getTextureMatrix(tex).getColumnMajorData(tmp);
+                gl.glLoadMatrixf(tmp, 0);
+            }
+            gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        } else if (haveTexCoords) {
+            // Want to turn off the use of texture coordinates to avoid errors
+            // FIXME: not 100% sure whether we need to do this, but think we should
+            gl.glDisableClientState(GLPointerFunc.GL_TEXTURE_COORD_ARRAY);
+        }
 
-      if (tex != null) {
-        gl.glMatrixMode(GL.GL_TEXTURE);
-        gl.glPopMatrix();
-        gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-      } else if (haveTexCoords) {
-        // Might want this the next time we render a shape
-        gl.glEnableClientState(GLPointerFunc.GL_TEXTURE_COORD_ARRAY);
-      }
-    }
-  }
+        // For now, assume the triangle set and the number of available
+        // coordinates match -- may want to add debugging information
+        // for this later
+        int numTriangles = CoordinateElement.get(state).limit() / 3 / 3;
+        gl.glDrawArrays(GL.GL_TRIANGLES, 0, 3 * numTriangles);
 
-  public void generateTriangles(final Action action, final TriangleCallback cb) {
-    final State state = action.getState();
-    FloatBuffer coords    = null;
-    FloatBuffer texCoords = null;
-    // FIXME: normals and lighting not supported yet
-    //    FloatBuffer normals   = null;
-    FloatBuffer colors    = null;
-    if (CoordinateElement.isEnabled(state)) {
-      coords = CoordinateElement.get(state);
-    }
-    // No point in continuing if we don't have coordinates
-    if (coords == null)
-      return;
-    if (TextureCoordinateElement.isEnabled(state)) {
-      texCoords = TextureCoordinateElement.get(state);
-    }
-    //    if (NormalElement.isEnabled(state)) {
-    //      texCoords = NormalElement.get(state);
-    //    }
-    if (ColorElement.isEnabled(state)) {
-      colors = ColorElement.get(state);
-    }
-    final PrimitiveVertex v0 = new PrimitiveVertex();
-    final PrimitiveVertex v1 = new PrimitiveVertex();
-    final PrimitiveVertex v2 = new PrimitiveVertex();
-    v0.setCoord(new Vec3f());
-    v1.setCoord(new Vec3f());
-    v2.setCoord(new Vec3f());
-    if (texCoords != null) {
-      v0.setTexCoord(new Vec2f());
-      v1.setTexCoord(new Vec2f());
-      v2.setTexCoord(new Vec2f());
-    }
-    if (colors != null) {
-      v0.setColor(new Vec4f());
-      v1.setColor(new Vec4f());
-      v2.setColor(new Vec4f());
+        if (tex != null) {
+            gl.glMatrixMode(GL.GL_TEXTURE);
+            gl.glPopMatrix();
+            gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        } else if (haveTexCoords) {
+            // Might want this the next time we render a shape
+            gl.glEnableClientState(GLPointerFunc.GL_TEXTURE_COORD_ARRAY);
+        }
+
     }
 
-    int coordIdx = 0;
-    for (int i = 0; i < numTriangles; i++) {
-      // Vertex 0
-      v0.getCoord().set(coords.get(3 * coordIdx),
-                        coords.get(3 * coordIdx + 1),
-                        coords.get(3 * coordIdx + 2));
-      if (texCoords != null) {
-        v0.getTexCoord().set(texCoords.get(2 * coordIdx),
-                             texCoords.get(2 * coordIdx + 1));
-      }
-      if (colors != null) {
-        v0.getColor().set(colors.get(4 * coordIdx),
-                          colors.get(4 * coordIdx + 1),
-                          colors.get(4 * coordIdx + 2),
-                          colors.get(4 * coordIdx + 3));
-      }
+    public void generateTriangles(final Action action, final TriangleCallback cb) {
+        final State state = action.getState();
+        FloatBuffer coords = null;
+        FloatBuffer texCoords = null;
+        // FIXME: normals and lighting not supported yet
+        //    FloatBuffer normals   = null;
+        FloatBuffer colors = null;
+        if (CoordinateElement.isEnabled(state)) {
+            coords = CoordinateElement.get(state);
+        }
+        // No point in continuing if we don't have coordinates
+        if (coords == null) return;
+        if (TextureCoordinateElement.isEnabled(state)) {
+            texCoords = TextureCoordinateElement.get(state);
+        }
+        //    if (NormalElement.isEnabled(state)) {
+        //      texCoords = NormalElement.get(state);
+        //    }
+        if (ColorElement.isEnabled(state)) {
+            colors = ColorElement.get(state);
+        }
+        final PrimitiveVertex v0 = new PrimitiveVertex();
+        final PrimitiveVertex v1 = new PrimitiveVertex();
+        final PrimitiveVertex v2 = new PrimitiveVertex();
+        v0.setCoord(new Vec3f());
+        v1.setCoord(new Vec3f());
+        v2.setCoord(new Vec3f());
+        if (texCoords != null) {
+            v0.setTexCoord(new Vector2f());
+            v1.setTexCoord(new Vector2f());
+            v2.setTexCoord(new Vector2f());
+        }
+        if (colors != null) {
+            v0.setColor(new Vec4f());
+            v1.setColor(new Vec4f());
+            v2.setColor(new Vec4f());
+        }
 
-      // Vertex 1
-      v1.getCoord().set(coords.get(3 * (coordIdx + 1)),
-                        coords.get(3 * (coordIdx + 1) + 1),
-                        coords.get(3 * (coordIdx + 1) + 2));
-      if (texCoords != null) {
-        v1.getTexCoord().set(texCoords.get(2 * (coordIdx + 1)),
-                             texCoords.get(2 * (coordIdx + 1) + 1));
-      }
-      if (colors != null) {
-        v1.getColor().set(colors.get(4 * (coordIdx + 1)),
-                          colors.get(4 * (coordIdx + 1) + 1),
-                          colors.get(4 * (coordIdx + 1) + 2),
-                          colors.get(4 * (coordIdx + 1) + 3));
-      }
+        int coordIdx = 0;
+        int numTriangles = coords.limit() / 3 / 3;
+        for (int i = 0; i < numTriangles; i++) {
+            // Vertex 0
+            v0.getCoord().set(coords.get(3 * coordIdx), coords.get(3 * coordIdx + 1), coords.get(3 * coordIdx + 2));
+            if (texCoords != null) {
+                v0.getTexCoord().set(texCoords.get(2 * coordIdx), texCoords.get(2 * coordIdx + 1));
+            }
+            if (colors != null) {
+                v0.getColor().set(colors.get(4 * coordIdx), colors.get(4 * coordIdx + 1), colors.get(4 * coordIdx + 2), colors.get(4 * coordIdx + 3));
+            }
 
-      // Vertex 2
-      v2.getCoord().set(coords.get(3 * (coordIdx + 2)),
-                        coords.get(3 * (coordIdx + 2) + 1),
-                        coords.get(3 * (coordIdx + 2) + 2));
-      if (texCoords != null) {
-        v2.getTexCoord().set(texCoords.get(2 * (coordIdx + 2)),
-                             texCoords.get(2 * (coordIdx + 2) + 1));
-      }
-      if (colors != null) {
-        v2.getColor().set(colors.get(4 * (coordIdx + 2)),
-                          colors.get(4 * (coordIdx + 2) + 1),
-                          colors.get(4 * (coordIdx + 2) + 2),
-                          colors.get(4 * (coordIdx + 2) + 3));
-      }
+            // Vertex 1
+            v1.getCoord().set(coords.get(3 * (coordIdx + 1)), coords.get(3 * (coordIdx + 1) + 1), coords.get(3 * (coordIdx + 1) + 2));
+            if (texCoords != null) {
+                v1.getTexCoord().set(texCoords.get(2 * (coordIdx + 1)), texCoords.get(2 * (coordIdx + 1) + 1));
+            }
+            if (colors != null) {
+                v1.getColor().set(colors.get(4 * (coordIdx + 1)), colors.get(4 * (coordIdx + 1) + 1), colors.get(4 * (coordIdx + 1) + 2), colors.get(4 * (coordIdx + 1) + 3));
+            }
 
-      // Call callback
-      cb.triangleCB(i,
-                    v0, 3 * i,
-                    v1, 3 * i + 1,
-                    v2, 3 * i + 2);
+            // Vertex 2
+            v2.getCoord().set(coords.get(3 * (coordIdx + 2)), coords.get(3 * (coordIdx + 2) + 1), coords.get(3 * (coordIdx + 2) + 2));
+            if (texCoords != null) {
+                v2.getTexCoord().set(texCoords.get(2 * (coordIdx + 2)), texCoords.get(2 * (coordIdx + 2) + 1));
+            }
+            if (colors != null) {
+                v2.getColor().set(colors.get(4 * (coordIdx + 2)), colors.get(4 * (coordIdx + 2) + 1), colors.get(4 * (coordIdx + 2) + 2), colors.get(4 * (coordIdx + 2) + 3));
+            }
 
-      coordIdx += 3;
+            // Call callback
+            cb.triangleCB(i, v0, 3 * i, v1, 3 * i + 1, v2, 3 * i + 2);
+
+            coordIdx += 3;
+        }
     }
-  }
 
-  // Helper routine for setting up a texture matrix to allow texture
-  // coords in the scene graph to always be specified from (0..1)
-  private final Mat4f textureMatrix = new Mat4f();
-  private Mat4f getTextureMatrix(final Texture texture) {
-    textureMatrix.makeIdent();
-    final TextureCoords coords = texture.getImageTexCoords();
-    // Horizontal scale
-    textureMatrix.set(0, 0, coords.right() - coords.left());
-    // Vertical scale (may be negative if texture needs to be flipped vertically)
-    final float vertScale = coords.top() - coords.bottom();
-    textureMatrix.set(1, 1, vertScale);
-    textureMatrix.set(0, 3, coords.left());
-    textureMatrix.set(1, 3, coords.bottom());
-    return textureMatrix;
-  }
+    private Mat4f getTextureMatrix(final Texture texture) {
+        textureMatrix.setIdentity();
+        final TextureCoords coords = texture.getImageTexCoords();
+        // Horizontal scale
+        textureMatrix.set(0, 0, coords.right() - coords.left());
+        // Vertical scale (may be negative if texture needs to be flipped vertically)
+        final float vertScale = coords.top() - coords.bottom();
+        textureMatrix.set(1, 1, vertScale);
+        textureMatrix.set(0, 3, coords.left());
+        textureMatrix.set(1, 3, coords.bottom());
+        return textureMatrix;
+    }
 }

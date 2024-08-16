@@ -42,6 +42,8 @@ import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
+import javax.vecmath.Matrix4f;
+
 /** Represents the viewing matrix, which contains the transformation
     between the camera and the model, and performs side-effects in
     OpenGL. */
@@ -71,7 +73,7 @@ public class GLViewingMatrixElement extends ViewingMatrixElement {
   public void setElt(Mat4f matrix) {
     super.setElt(matrix);
     // Must push the combined viewing and modelview matrices down to OpenGL
-    Mat4f mdl = ModelMatrixElement.getInstance(state).getMatrix();
+    Matrix4f mdl = ModelMatrixElement.getInstance(state).getMatrix();
     temp.mul(matrix, mdl);
     GL2 gl = GLU.getCurrentGL().getGL2();
     if (gl.isExtensionAvailable("GL_VERSION_1_3")) {

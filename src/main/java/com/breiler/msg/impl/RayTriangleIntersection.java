@@ -38,7 +38,8 @@
 package com.breiler.msg.impl;
 
 import com.breiler.msg.math.Line;
-import com.breiler.msg.math.Vec3f;
+
+import javax.vecmath.Vector3f;
 
 /** Intersection of ray with triangle. Computes parameteric t along
     with barycentric coordinates (u, v) indicating weight of vert1 and
@@ -50,19 +51,19 @@ import com.breiler.msg.math.Vec3f;
     Number 1, 1997, pp. 21-28. */
 
 public class RayTriangleIntersection {
-  private final Vec3f edge1 = new Vec3f();
-  private final Vec3f edge2 = new Vec3f();
-  private final Vec3f tvec = new Vec3f();
-  private final Vec3f pvec = new Vec3f();
-  private final Vec3f qvec = new Vec3f();
+  private final Vector3f edge1 = new Vector3f();
+  private final Vector3f edge2 = new Vector3f();
+  private final Vector3f tvec = new Vector3f();
+  private final Vector3f pvec = new Vector3f();
+  private final Vector3f qvec = new Vector3f();
 
   private static final float EPSILON = 0.000001f;
 
   public boolean intersectTriangle(Line ray,
-                                   Vec3f vert0,
-                                   Vec3f vert1,
-                                   Vec3f vert2,
-                                   Vec3f tuv) {
+                                   Vector3f vert0,
+                                   Vector3f vert1,
+                                   Vector3f vert2,
+                                   Vector3f tuv) {
     // Find vectors for two edges sharing vert0
     edge1.sub(vert1, vert0);
     edge2.sub(vert2, vert0);
@@ -97,50 +98,6 @@ public class RayTriangleIntersection {
     // Calculate t, ray intersects triangle
     float t = edge2.dot(qvec) * invDet;
 
-    tuv.set(t, u, v);
-    return true;
-  }
-
-  public boolean intersectTriangleBackfaceCulling(Line ray,
-                                                  Vec3f vert0,
-                                                  Vec3f vert1,
-                                                  Vec3f vert2,
-                                                  Vec3f tuv) {
-    // Find vectors for two edges sharing vert0
-    edge1.sub(vert1, vert0);
-    edge2.sub(vert2, vert0);
-
-    // Begin calculating determinant -- also used to calculate U parameter
-    pvec.cross(ray.getDirection(), edge2);
-    
-    // If determinant is near zero, ray lies in plane of triangle
-    float det = edge1.dot(pvec);
-
-    if (det < EPSILON)
-      return false;
-
-    // Calculate distance from vert0 to ray origin
-    tvec.sub(ray.getPoint(), vert0);
-
-    // Calculate U parameter and test bounds
-    float u = tvec.dot(pvec);
-    if (u < 0.0f || u > det)
-      return false;
-
-    // Prepare to test V parameter
-    qvec.cross(tvec, edge1);
-
-    // Calculate V parameter and test bounds
-    float v = ray.getDirection().dot(qvec);
-    if (v < 0.0f || (u + v) > det)
-      return false;
-
-    // Calculate t, scale parameters, ray intersects triangle
-    float t = edge2.dot(qvec);
-    float invDet = 1.0f / det;
-    t *= invDet;
-    u *= invDet;
-    v *= invDet;
     tuv.set(t, u, v);
     return true;
   }

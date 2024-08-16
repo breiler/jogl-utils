@@ -73,7 +73,7 @@ public class ModelMatrixElement extends Element {
 
   public ModelMatrixElement() {
     matrix = new Mat4f();
-    matrix.makeIdent();
+    matrix.setIdentity();
   }
 
   public void push(State state) {
@@ -97,7 +97,7 @@ public class ModelMatrixElement extends Element {
 
   /** Sets this element to the identity matrix. */
   public void makeEltIdent() {
-    matrix.makeIdent();
+    matrix.setIdentity();
   }
 
   /** Multiplies the current element by the given matrix. */

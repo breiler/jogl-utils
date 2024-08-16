@@ -72,7 +72,7 @@ public class ProjectionMatrixElement extends Element {
 
   public ProjectionMatrixElement() {
     matrix = new Mat4f();
-    matrix.makeIdent();
+    matrix.setIdentity();
   }
   
   /** Returns the current projection matrix; callers should not mutate

@@ -42,6 +42,8 @@ import com.breiler.msg.misc.State;
 import com.breiler.msg.misc.StateIndex;
 import com.breiler.msg.nodes.Blend;
 
+import javax.vecmath.Vector4f;
+
 /** Represents the blending state of the OpenGL fixed-function pipeline. */
 
 public class BlendElement extends Element {
@@ -71,7 +73,7 @@ public class BlendElement extends Element {
 
   // Whether blending is enabled
   protected boolean enabled;
-  protected Vec4f blendColor = new Vec4f();
+  protected Vector4f blendColor = new Vector4f();
   protected int srcFunc = Blend.ONE;
   protected int destFunc = Blend.ZERO;
   protected int blendEquation = Blend.FUNC_ADD;
@@ -79,7 +81,7 @@ public class BlendElement extends Element {
   /** Sets all of the portions of the blending state in the passed State object. */
   public static void set(State state,
                          boolean enabled,
-                         Vec4f blendColor,
+                         Vector4f blendColor,
                          int srcFunc,
                          int destFunc,
                          int blendEquation) {
@@ -96,7 +98,7 @@ public class BlendElement extends Element {
   }
 
   /** Returns the blending color. */
-  public static Vec4f getBlendColor(State state) {
+  public static Vector4f getBlendColor(State state) {
     return getInstance(state).blendColor;
   }
 
@@ -129,7 +131,7 @@ public class BlendElement extends Element {
 
   /** Sets all of the portions of the blending state in this element. */
   public void setElt(boolean enabled,
-                     Vec4f blendColor,
+                     Vector4f blendColor,
                      int srcFunc,
                      int destFunc,
                      int blendEquation) {

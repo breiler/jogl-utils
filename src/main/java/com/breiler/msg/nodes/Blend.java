@@ -43,11 +43,13 @@ import com.breiler.msg.elements.BlendElement;
 import com.breiler.msg.elements.GLBlendElement;
 import com.breiler.msg.math.Vec4f;
 
+import javax.vecmath.Vector4f;
+
 /** Provides control over OpenGL blending modes. */
 
 public class Blend extends Node {
   private boolean enabled;
-  private final Vec4f blendColor = new Vec4f();
+  private final Vector4f blendColor = new Vector4f();
   private int srcFunc = ONE;
   private int destFunc = ZERO;
   private int blendEquation = FUNC_ADD;
@@ -160,13 +162,13 @@ public class Blend extends Node {
 
   /** Sets the blending color; see the documentation for glBlendColor
       for more details. Defaults to [0, 0, 0, 0]. */
-  public void setBlendColor(Vec4f color) {
+  public void setBlendColor(Vector4f color) {
     blendColor.set(color);
   }
 
   /** Gets the blending color; see the documentation for glBlendColor
       for more details. Defaults to [0, 0, 0, 0]. */
-  public Vec4f getBlendColor() {
+  public Vector4f getBlendColor() {
     return blendColor;
   }
 

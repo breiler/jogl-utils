@@ -35,7 +35,7 @@
  *
  */
 
-package com.breiler.msg.test;
+package com.breiler.msg.test.movies;
 
 import java.awt.BorderLayout;
 import java.awt.DisplayMode;

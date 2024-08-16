@@ -37,12 +37,13 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
 import com.breiler.msg.nodes.Blend;
+
+import javax.vecmath.Vector4f;
 
 /** Represents the blending state of the OpenGL fixed-function
     pipeline and causes side-effects in OpenGL for rendering. */
@@ -65,7 +66,7 @@ public class GLBlendElement extends BlendElement {
   }
 
   public void setElt(boolean enabled,
-                     Vec4f blendColor,
+                     Vector4f blendColor,
                      int srcFunc,
                      int destFunc,
                      int blendEquation) {
@@ -128,7 +129,7 @@ public class GLBlendElement extends BlendElement {
       gl.glBlendFunc(oglSrcFunc, oglDestFunc);
       if (gl.isExtensionAvailable("GL_ARB_imaging")) {
         gl.glBlendEquation(oglBlendEquation(blendEquation));
-        gl.glBlendColor(blendColor.x(), blendColor.y(), blendColor.z(), blendColor.w());
+        gl.glBlendColor(blendColor.getX(), blendColor.getY(), blendColor.getZ(), blendColor.getW());
       }
     } else {
       gl.glDisable(GL2.GL_BLEND);

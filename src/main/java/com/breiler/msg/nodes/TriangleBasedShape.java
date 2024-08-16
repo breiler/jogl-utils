@@ -94,13 +94,13 @@ public abstract class TriangleBasedShape extends Shape {
             // coordinates
             PickedPoint p = new PickedPoint();
             // Compute weights of three vertices
-            float a = 1.0f - tuv.y() - tuv.z();
-            float b = tuv.y();
-            float c = tuv.z();
+            float a = 1.0f - tuv.getY() - tuv.getZ();
+            float b = tuv.getY();
+            float c = tuv.getZ();
             Vec3f loc = v0.getCoord().times(a).plus(v1.getCoord().times(b)).plus(v2.getCoord().times(c));
             p.setCoord(loc);
             p.setPath(action.getPath().copy());
-            action.addPickedPoint(p, tuv.x());
+            action.addPickedPoint(p, tuv.getX());
           }
         }
       });

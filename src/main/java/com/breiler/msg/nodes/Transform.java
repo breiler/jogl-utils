@@ -67,7 +67,7 @@ public class Transform extends Node {
 
   public Transform() {
     transform = new Mat4f();
-    transform.makeIdent();
+    transform.setIdentity();
   }
 
   /** Sets the transformation in thie node. */

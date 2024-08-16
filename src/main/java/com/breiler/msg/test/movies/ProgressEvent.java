@@ -28,27 +28,51 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.breiler.msg.test;
+package com.breiler.msg.test.movies;
+
+import java.util.EventObject;
 
 /**
- * Provides notification of upload or download progress. The IDENT
- * type is that used by the client to identify the particular element
- * (image) being operated upon.
+ * Represents a progress event during downloading or uploading of an
+ * image.
  *
  * @author Kenneth Russell
  */
 
-public interface ProgressListener<IDENT> {
-    /** Begins progress notification for a particular item which is
-        identified by the ProgressEvent. NOTE: this may be called
-        multiple times; clients must handle this case. */
-    void progressStart(ProgressEvent<IDENT> evt);
-    
-    /** Updates progress notification for a particular item which is
-        identified by the ProgressEvent. */
-    void progressUpdate(ProgressEvent<IDENT> evt);
-    
-    /** Ends progress notification for a particular item which is
-        identified by the ProgressEvent. */
-    void progressEnd(ProgressEvent<IDENT> evt);
+public class ProgressEvent<IDENT> extends EventObject {
+    private final Object  imageDescriptor;
+    private final IDENT   clientIdentifier;
+    private final float   fractionCompleted;
+    private final boolean isDownload;
+
+    public ProgressEvent(Fetcher<IDENT> source,
+                         Object imageDescriptor,
+                         IDENT clientIdentifier,
+                         float fractionCompleted,
+                         boolean isDownload) {
+        super(source);
+        this.imageDescriptor = imageDescriptor;
+        this.clientIdentifier = clientIdentifier;
+        this.fractionCompleted = fractionCompleted;
+        this.isDownload = isDownload;
+    }
+
+    public Object getImageDescriptor() {
+        return imageDescriptor;
+    }
+
+    public IDENT getClientIdentifier() {
+        return clientIdentifier;
+    }
+
+    /** Returns a fraction between 0.0f and 1.0f, or a negative number
+        if we weren't able to make a determination of the estimated
+        image size. */
+    public float getFractionCompleted() {
+        return fractionCompleted;
+    }
+
+    public boolean isDownload() {
+        return isDownload;
+    }
 }

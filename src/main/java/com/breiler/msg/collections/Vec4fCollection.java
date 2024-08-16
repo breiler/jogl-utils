@@ -40,7 +40,8 @@ package com.breiler.msg.collections;
 import java.nio.FloatBuffer;
 
 import com.breiler.msg.impl.BufferFactory;
-import com.breiler.msg.math.Vec4f;
+
+import javax.vecmath.Vector4f;
 
 /** Provides the abstraction of a collection of Vec4f objects while
     allowing access to the backing store in the form of a direct
@@ -72,21 +73,21 @@ public class Vec4fCollection {
 
   /** Stores the given Vec4f at the given index. If the collection has
       not grown to the given size, throws an exception. */
-  public void set(int index, Vec4f value) throws IndexOutOfBoundsException {
+  public void set(int index, Vector4f value) throws IndexOutOfBoundsException {
     if (index >= size()) {
       throw new IndexOutOfBoundsException(index + " >= " + size());
     }
     int base = index * ELEMENT_SIZE;
     FloatBuffer buf = data;
-    buf.put(base,     value.x());
-    buf.put(base + 1, value.y());
-    buf.put(base + 2, value.z());
-    buf.put(base + 3, value.w());
+    buf.put(base,     value.getX());
+    buf.put(base + 1, value.getY());
+    buf.put(base + 2, value.getZ());
+    buf.put(base + 3, value.getW());
   }
 
   /** Fetches the Vec4f at the given index. If the collection has not
       grown to the given size, throws an exception. */
-  public Vec4f get(int index) throws IndexOutOfBoundsException {
+  public Vector4f get(int index) throws IndexOutOfBoundsException {
     if (index >= size()) {
       throw new IndexOutOfBoundsException(index + " >= " + size());
     }
@@ -95,12 +96,12 @@ public class Vec4fCollection {
     // is an issue. However, escape analysis should eventually take
     // care of this.
     FloatBuffer buf = data;
-    return new Vec4f(buf.get(base), buf.get(base + 1), buf.get(base + 2), buf.get(base + 3));
+    return new Vector4f(buf.get(base), buf.get(base + 1), buf.get(base + 2), buf.get(base + 3));
   }
 
   /** Adds the given Vec4f to this collection, expanding it if
       necessary. */
-  public void add(Vec4f value) {
+  public void add(Vector4f value) {
     FloatBuffer buf = data;
     if (buf.limit() == buf.capacity()) {
       FloatBuffer newBuf = BufferFactory.newFloatBuffer(Math.max(buf.capacity() + ELEMENT_SIZE,
@@ -113,21 +114,21 @@ public class Vec4fCollection {
     }
     int pos = buf.limit();
     buf.limit(pos + ELEMENT_SIZE);
-    buf.put(pos,     value.x());
-    buf.put(pos + 1, value.y());
-    buf.put(pos + 2, value.z());
-    buf.put(pos + 3, value.w());
+    buf.put(pos,     value.getX());
+    buf.put(pos + 1, value.getY());
+    buf.put(pos + 2, value.getZ());
+    buf.put(pos + 3, value.getW());
   }
 
   /** Removes the given Vec4f from this collection. Moves all Vec4fs
       above it down one slot. */
-  public Vec4f remove(int index) throws IndexOutOfBoundsException {
+  public Vector4f remove(int index) throws IndexOutOfBoundsException {
     if (index >= size()) {
       throw new IndexOutOfBoundsException(index + " >= " + size());
     }
     FloatBuffer buf = data;
     int pos = index * ELEMENT_SIZE;
-    Vec4f res = new Vec4f(buf.get(pos), buf.get(pos + 1), buf.get(pos + 2), buf.get(pos + 3));
+    Vector4f res = new Vector4f(buf.get(pos), buf.get(pos + 1), buf.get(pos + 2), buf.get(pos + 3));
     if (index == size() - 1) {
       // Simply lower the limit
       buf.limit(buf.limit() - ELEMENT_SIZE);

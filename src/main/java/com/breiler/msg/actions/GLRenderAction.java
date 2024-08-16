@@ -39,8 +39,10 @@ package com.breiler.msg.actions;
 
 import java.lang.reflect.Method;
 
+import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.misc.ActionTable;
 import com.breiler.msg.misc.State;
+import com.breiler.msg.nodes.Shape;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 

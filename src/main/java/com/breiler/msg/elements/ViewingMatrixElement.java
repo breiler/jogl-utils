@@ -72,7 +72,7 @@ public class ViewingMatrixElement extends Element {
 
   public ViewingMatrixElement() {
     matrix = new Mat4f();
-    matrix.makeIdent();
+    matrix.setIdentity();
   }
   
   /** Returns the current viewing matrix; callers should not mutate

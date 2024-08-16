@@ -35,7 +35,7 @@
  *
  */
 
-package com.breiler.msg.test;
+package com.breiler.msg.test.movies;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -49,8 +49,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ListModel;
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector4f;
 
 import com.breiler.msg.misc.PickedPoint;
+import com.breiler.msg.nodes.Group;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -68,7 +71,6 @@ import com.breiler.msg.collections.Vec2fCollection;
 import com.breiler.msg.collections.Vec3fCollection;
 import com.breiler.msg.collections.Vec4fCollection;
 import com.breiler.msg.math.Rotf;
-import com.breiler.msg.math.Vec2f;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.Path;
@@ -77,7 +79,6 @@ import com.breiler.msg.nodes.Blend;
 import com.breiler.msg.nodes.Color4;
 import com.breiler.msg.nodes.Coordinate3;
 import com.breiler.msg.nodes.PerspectiveCamera;
-import com.breiler.msg.nodes.Separator;
 import com.breiler.msg.nodes.Texture2;
 import com.breiler.msg.nodes.TextureCoordinate2;
 import com.breiler.msg.nodes.Transform;
@@ -110,7 +111,7 @@ public class DisplayShelfRenderer implements GLEventListener {
 
   static class TitleGraph {
     Object imageDescriptor;
-    Separator sep   = new Separator();
+    Group sep   = new Group();
     Transform xform = new Transform();
     Texture2  texture = new Texture2();
     Coordinate3 coords = new Coordinate3();
@@ -127,8 +128,8 @@ public class DisplayShelfRenderer implements GLEventListener {
 
   private AWTGLAutoDrawable drawable;
 
-  private final Separator root;
-  private Separator imageRoot;
+  private final Group root;
+  private Group imageRoot;
   private final Fetcher<Integer> fetcher;
   private final ListModel model;
   private final List<TitleGraph> titles = new ArrayList<>();
@@ -191,7 +192,7 @@ public class DisplayShelfRenderer implements GLEventListener {
     this.fetcher = new BasicFetcher<Integer>();
     fetcher.addProgressListener(new DownloadListener());
     this.model = model;
-    root = new Separator();
+    root = new Group();
     time = new SystemTime();
     time.rebase();
     camera = new PerspectiveCamera();
@@ -271,10 +272,10 @@ public class DisplayShelfRenderer implements GLEventListener {
                                        false);
 
       // The images
-      imageRoot = new Separator();
+      imageRoot = new Group();
 
       // The mirrored images under the floor
-      final Separator mirrorRoot = new Separator();
+      final Group mirrorRoot = new Group();
 
       final Transform mirrorXform = new Transform();
       // Mirror vertically
@@ -284,8 +285,8 @@ public class DisplayShelfRenderer implements GLEventListener {
       // colors for each piece of geometry in one shot
       final Color4 colorNode = new Color4();
       final Vec4fCollection colors = new Vec4fCollection();
-      final Vec4f fadeTop = new Vec4f(0.75f, 0.75f, 0.75f, 0.75f);
-      final Vec4f fadeBot = new Vec4f(0.25f, 0.25f, 0.25f, 0.25f);
+      final Vector4f fadeTop = new Vector4f(0.75f, 0.75f, 0.75f, 0.75f);
+      final Vector4f fadeBot = new Vector4f(0.25f, 0.25f, 0.25f, 0.25f);
       // First triangle
       colors.add(fadeTop);
       colors.add(fadeTop);
@@ -298,7 +299,7 @@ public class DisplayShelfRenderer implements GLEventListener {
       mirrorRoot.addChild(colorNode);
 
       final TriangleSet tris = new TriangleSet();
-      tris.setNumTriangles(2);
+
 
       for (int i = 0; i < model.getSize(); i++) {
         final Object obj = model.getElementAt(i);
@@ -306,7 +307,7 @@ public class DisplayShelfRenderer implements GLEventListener {
         titles.add(graph);
         computeCoords(graph.coords, DEFAULT_ASPECT_RATIO);
         graph.xform.getTransform().setTranslation(new Vec3f(i, 0, 0));
-        final Separator sep = graph.sep;
+        final Group sep = graph.sep;
         sep.addChild(graph.xform);
         sep.addChild(graph.coords);
         // Add in the clock texture at the beginning
@@ -315,13 +316,13 @@ public class DisplayShelfRenderer implements GLEventListener {
         final Vec2fCollection texCoords = new Vec2fCollection();
         // Texture coordinates for two triangles
         // First triangle
-        texCoords.add(new Vec2f( 1,  1));
-        texCoords.add(new Vec2f( 0,  1));
-        texCoords.add(new Vec2f( 0,  0));
+        texCoords.add(new Vector2f( 1,  1));
+        texCoords.add(new Vector2f( 0,  1));
+        texCoords.add(new Vector2f( 0,  0));
         // Second triangle
-        texCoords.add(new Vec2f( 1,  1));
-        texCoords.add(new Vec2f( 0,  0));
-        texCoords.add(new Vec2f( 1,  0));
+        texCoords.add(new Vector2f( 1,  1));
+        texCoords.add(new Vector2f( 0,  0));
+        texCoords.add(new Vector2f( 1,  0));
         texCoordNode.setData(texCoords);
         sep.addChild(texCoordNode);
 
@@ -341,7 +342,7 @@ public class DisplayShelfRenderer implements GLEventListener {
       final float minz = -2 * DEFAULT_HEIGHT;
       // Assume this will be close enough to cover all of the mirrored geometry
       final float maxz =  DEFAULT_HEIGHT;
-      final Separator floorRoot = new Separator();
+      final Group floorRoot = new Group();
       final Blend blend = new Blend();
       blend.setEnabled(true);
       blend.setSourceFunc(Blend.ONE);
@@ -359,8 +360,8 @@ public class DisplayShelfRenderer implements GLEventListener {
       floorCoords.getData().add(new Vec3f(maxx, 0, maxz));
       floorRoot.addChild(floorCoords);
       // Colors
-      final Vec4f gray = new Vec4f(0.4f, 0.4f, 0.4f, 0.4f);
-      final Vec4f clearGray = new Vec4f(0.0f, 0.0f, 0.0f, 0.0f);
+      final Vector4f gray = new Vector4f(0.4f, 0.4f, 0.4f, 0.4f);
+      final Vector4f clearGray = new Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
       final Color4 floorColors = new Color4();
       floorColors.setData(new Vec4fCollection());
       // First triangle

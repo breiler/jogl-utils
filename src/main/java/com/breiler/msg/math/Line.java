@@ -37,6 +37,8 @@
 
 package com.breiler.msg.math;
 
+import javax.vecmath.Vector3f;
+
 /** Represents a line in 3D space. */
 
 public class Line {
@@ -83,7 +85,7 @@ public class Line {
   }
 
   /** Setter does some work to maintain internal caches. */
-  public void setPoint(Vec3f point) {
+  public void setPoint(Vector3f point) {
     this.point.set(point);
     recalc();
   }
@@ -92,48 +94,7 @@ public class Line {
     return point;
   }
 
-  /** Project a point onto the line */
-  public void projectPoint(Vec3f pt,
-                           Vec3f projPt) {
-    float dotp = direction.dot(pt);
-    projPt.set(direction);
-    projPt.scale(dotp);
-    projPt.add(alongVec);
-  }
 
-  /** Find closest point on this line to the given ray, specified by
-      start point and direction. If ray is parallel to this line,
-      returns false and closestPoint is not modified. */
-  public boolean closestPointToRay(Vec3f rayStart,
-                                   Vec3f rayDirection,
-                                   Vec3f closestPoint) {
-    // Line 1 is this one. Line 2 is the incoming one.
-    Mat2f A = new Mat2f();
-    A.set(0, 0, -direction.lengthSquared());
-    A.set(1, 1, -rayDirection.lengthSquared());
-    A.set(0, 1, direction.dot(rayDirection));
-    A.set(1, 0, A.get(0, 1));
-    if (Math.abs(A.determinant()) == 0.0f) {
-      return false;
-    }
-    if (!A.invert()) {
-      return false;
-    }
-    Vec2f b = new Vec2f();
-    b.setX(point.dot(direction) - rayStart.dot(direction));
-    b.setY(rayStart.dot(rayDirection) - point.dot(rayDirection));
-    Vec2f x = new Vec2f();
-    A.xformVec(b, x);
-    if (x.y() < 0) {
-      // Means that ray start is closest point to this line
-      closestPoint.set(rayStart);
-    } else {
-      closestPoint.set(direction);
-      closestPoint.scale(x.x());
-      closestPoint.add(point);
-    }
-    return true;
-  }
 
   //----------------------------------------------------------------------
   // Internals only below this point

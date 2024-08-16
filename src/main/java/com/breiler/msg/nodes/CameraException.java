@@ -35,17 +35,13 @@
  * 
  */
 
-package com.breiler.msg.math;
+package com.breiler.msg.nodes;
 
-/** Thrown to indicate a mismatch of dimensionality of a matrix or
-    vector. */
+/** Thrown to indicate a singular matrix during an inversion or
+    related operation. */
 
-public class DimensionMismatchException extends RuntimeException {
-  public DimensionMismatchException() {
+public class CameraException extends RuntimeException {
+  public CameraException() {
     super();
-  }
-
-  public DimensionMismatchException(String msg) {
-    super(msg);
   }
 }

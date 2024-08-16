@@ -42,6 +42,8 @@ import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
+import javax.vecmath.Matrix4f;
+
 /** Represents the model matrix, which is the transformation applied
     to objects in the scene, and causes side-effects in OpenGL. */
 

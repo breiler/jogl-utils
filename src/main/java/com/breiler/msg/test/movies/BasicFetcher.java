@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.breiler.msg.test;
+package com.breiler.msg.test.movies;
 
 import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
