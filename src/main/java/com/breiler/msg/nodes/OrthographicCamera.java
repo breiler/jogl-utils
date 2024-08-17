@@ -39,9 +39,11 @@ package com.breiler.msg.nodes;
 
 import com.breiler.msg.actions.GLRenderAction;
 import com.breiler.msg.math.Mat4f;
+import static com.breiler.msg.math.MathUtils.times;
 import com.breiler.msg.math.Vec3f;
 
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 
 public class OrthographicCamera extends Camera {
   private static final float DEFAULT_HEIGHT = 2.0f;
@@ -103,7 +105,7 @@ public class OrthographicCamera extends Camera {
   protected Vec3f getRayStartPoint(Vector2f point, Vec3f unprojectedPoint) {
     // The easiest way to compute a reasonable ray start point is to
     // start from the unprojected 3D point and go back along the Z-axis
-    Vec3f backward = Vec3f.Z_AXIS.times(getNearDistance());
+    Vec3f backward = times(new Vector3f(0, 0, 1), getNearDistance());
     backward = getOrientation().rotateVector(backward);
     Vec3f result = new Vec3f(unprojectedPoint);
     result.add(backward);

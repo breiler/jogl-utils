@@ -50,6 +50,7 @@ import java.util.List;
 
 import javax.swing.ListModel;
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 import com.breiler.msg.misc.PickedPoint;
@@ -619,8 +620,8 @@ public class DisplayShelfRenderer implements GLEventListener {
     final float selectedSpacing = DEFAULT_HEIGHT * (zAlpha * EDITED_SPACING_FRAC + (1.0f - zAlpha) * SELECTED_SPACING_FRAC);
     final float angle = (1.0f - zAlpha) * ROT_ANGLE;
     final float y = zAlpha * DEFAULT_HEIGHT * SINGLE_IMAGE_MODE_RAISE_FRAC;
-    final Rotf posAngle = new Rotf(Vec3f.Y_AXIS,  angle);
-    final Rotf negAngle = new Rotf(Vec3f.Y_AXIS, -angle);
+    final Rotf posAngle = new Rotf(new Vector3f(0,1,0),  angle);
+    final Rotf negAngle = new Rotf(new Vector3f(0,1,0), -angle);
     float offset = 0;
 
     // Only bump the selected title out of the list if we're in viewing mode and close to it
@@ -644,7 +645,7 @@ public class DisplayShelfRenderer implements GLEventListener {
         final float cameraPos = curPos + alpha * selectedSpacing;
 
         // Interpolate
-        graph.xform.getTransform().setRotation(new Rotf(Vec3f.Y_AXIS, alpha * angle));
+        graph.xform.getTransform().setRotation(new Rotf(new Vector3f(0,1,0), alpha * angle));
         graph.xform.getTransform().setTranslation(new Vec3f(curPos, y, (1.0f - alpha) * offset));
 
         // Now recompute the position of the camera
@@ -657,7 +658,7 @@ public class DisplayShelfRenderer implements GLEventListener {
         curPos += selectedSpacing;
       } else {
         // Interpolate
-        graph.xform.getTransform().setRotation(new Rotf(Vec3f.Y_AXIS, (1.0f - alpha) * -angle));
+        graph.xform.getTransform().setRotation(new Rotf(new Vector3f(0,1,0), (1.0f - alpha) * -angle));
         graph.xform.getTransform().setTranslation(new Vec3f(curPos, y, alpha * offset));
 
         curPos += stackedSpacing + alpha * (selectedSpacing - stackedSpacing);

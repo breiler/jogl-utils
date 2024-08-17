@@ -6,6 +6,7 @@ import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.nodes.Node;
 
 import javax.swing.SwingUtilities;
+import javax.vecmath.Vector3f;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -70,15 +71,15 @@ public class CanvasMouseListener implements MouseListener, MouseMotionListener, 
         float xDistance = (float) (e.getX() - startClick.getX());
         float yDistance = (float) (e.getY() - startClick.getY());
 
-        float xV = -(float)(Math.PI * 2f) * (yDistance / 1000f);
-        float yV = -(float)(Math.PI * 2f) * (xDistance / 1000f);
+        float xV = (float)(Math.PI * 2f) * (yDistance / 1000f);
+        float yV = (float)(Math.PI * 2f) * (xDistance / 1000f);
 
         //System.out.println(xDistance + (xDistance / 10000f) + " " + v);
         Rotf orientation = scene.getCamera().getOrientation();
 
-        Rotf rotX = new Rotf(Vec3f.X_AXIS,  xV);
-        Rotf rotY = new Rotf(Vec3f.Y_AXIS, yV);
-        Rotf rotZ = new Rotf(Vec3f.Z_AXIS, orientation.get(Vec3f.Z_AXIS));
+        Rotf rotX = new Rotf(new Vector3f(1, 0, 0), xV);
+        Rotf rotY = new Rotf(new Vector3f(0, 1, 0), yV);
+        Rotf rotZ = new Rotf(new Vector3f(0, 0, 1), orientation.get(new Vector3f(0, 0, 1)));
 
         Rotf orientation1 = new Rotf();
         orientation1.mul(rotX, rotY);
@@ -87,7 +88,7 @@ public class CanvasMouseListener implements MouseListener, MouseMotionListener, 
 
         scene.getCamera().setOrientation(orientation2);
 
-        startClick.setLocation(e.getX(), e.getY());
+        //startClick.setLocation(e.getX(), e.getY());
 
 
     }

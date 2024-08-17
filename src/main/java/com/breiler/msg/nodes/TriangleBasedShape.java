@@ -43,6 +43,9 @@ import com.breiler.msg.elements.ModelMatrixElement;
 import com.breiler.msg.impl.RayTriangleIntersection;
 import com.breiler.msg.math.Line;
 import com.breiler.msg.math.Mat4f;
+import com.breiler.msg.math.MathUtils;
+import static com.breiler.msg.math.MathUtils.plus;
+import static com.breiler.msg.math.MathUtils.times;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.misc.PickedPoint;
 import com.breiler.msg.misc.PrimitiveVertex;
@@ -68,7 +71,7 @@ public abstract class TriangleBasedShape extends Shape {
     // Invert it to get the world-to-local matrix
     mat.invert();
     // Transform the RayPickAction's ray by this matrix
-    final Line ray = mat.xformLine(action.getComputedRay());
+    final Line ray = MathUtils.xformLine(mat, action.getComputedRay());
 
     // Temporaries
     final RayTriangleIntersection rti = new RayTriangleIntersection();
@@ -97,7 +100,7 @@ public abstract class TriangleBasedShape extends Shape {
             float a = 1.0f - tuv.getY() - tuv.getZ();
             float b = tuv.getY();
             float c = tuv.getZ();
-            Vec3f loc = v0.getCoord().times(a).plus(v1.getCoord().times(b)).plus(v2.getCoord().times(c));
+            Vec3f loc = plus(plus(times(v0.getCoord(), a), times(v1.getCoord(), b)), times(v2.getCoord(), c));
             p.setCoord(loc);
             p.setPath(action.getPath().copy());
             action.addPickedPoint(p, tuv.getX());

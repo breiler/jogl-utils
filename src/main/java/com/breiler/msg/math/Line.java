@@ -37,6 +37,9 @@
 
 package com.breiler.msg.math;
 
+import static com.breiler.msg.math.MathUtils.minus;
+import static com.breiler.msg.math.MathUtils.times;
+
 import javax.vecmath.Vector3f;
 
 /** Represents a line in 3D space. */
@@ -106,6 +109,6 @@ public class Line {
       throw new RuntimeException("Line.recalc: ERROR: direction was the zero vector " +
                                  "(not allowed)");
     }
-    alongVec.set(point.minus(direction.times(point.dot(direction))));
+    alongVec.set(minus(point, times(direction, point.dot(direction))));
   }
 }

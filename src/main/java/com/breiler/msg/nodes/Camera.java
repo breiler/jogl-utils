@@ -48,6 +48,8 @@ import com.breiler.msg.elements.ProjectionMatrixElement;
 import com.breiler.msg.elements.ViewingMatrixElement;
 import com.breiler.msg.math.Line;
 import com.breiler.msg.math.Mat4f;
+import com.breiler.msg.math.MathUtils;
+import static com.breiler.msg.math.MathUtils.minus;
 import com.breiler.msg.math.Rotf;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.math.Vec4f;
@@ -82,10 +84,6 @@ public abstract class Camera extends Node {
     }
 
     private final Set<CameraListener> cameraListeners = ConcurrentHashMap.newKeySet();
-
-    public void addCameraListener(CameraListener cameraListener) {
-        cameraListeners.add(cameraListener);
-    }
     private final Vec3f position;
     private final Rotf orientation;
     protected boolean projDirty;
@@ -96,7 +94,6 @@ public abstract class Camera extends Node {
     private float nearDistance = 1.0f;
     private float farDistance = 100.0f;
     private float focalDistance = 10.0f;
-
     public Camera() {
         position = new Vec3f(0, 0, 1);
         orientation = new Rotf();
@@ -105,6 +102,10 @@ public abstract class Camera extends Node {
         viewMatrix = new Mat4f();
         projDirty = true;
         viewDirty = true;
+    }
+
+    public void addCameraListener(CameraListener cameraListener) {
+        cameraListeners.add(cameraListener);
     }
 
     /**
@@ -226,9 +227,9 @@ public abstract class Camera extends Node {
             viewMatrix.setIdentity();
             viewDirty = false;
 
-            viewMatrix.setRotation(getOrientation());
+            getOrientation().toMatrix(viewMatrix);
             viewMatrix.setTranslation(getPosition());
-            viewMatrix.invertRigid();
+            MathUtils.invertRigid(viewMatrix);
         }
 
         return viewMatrix;
@@ -278,7 +279,7 @@ public abstract class Camera extends Node {
         mat.invert();
         // Multiply
         Vec4f unproj = new Vec4f();
-        mat.xformVec(pt3d, unproj);
+        MathUtils.xformVec(mat, pt3d, unproj);
         if (unproj.getW() == 0) {
             // FIXME: is this the right exception to throw in this case?
             throw new CameraException();
@@ -288,7 +289,7 @@ public abstract class Camera extends Node {
                 unproj.getY() * ooW,
                 unproj.getZ() * ooW);
         Vector3f from = getRayStartPoint(point, to);
-        Vec3f dir = to.minus(from);
+        Vec3f dir = minus(to, from);
 
         //    System.err.println("unprojected point: " + to);
         //    System.err.println("unprojected dir  : " + dir);

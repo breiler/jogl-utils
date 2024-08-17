@@ -37,6 +37,8 @@
 
 package com.breiler.msg.math;
 
+import static com.breiler.msg.math.MathUtils.cross;
+
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
@@ -99,30 +101,10 @@ public class Rotf extends Quat4f {
     }
 
     /**
-     * Sets this rotation to that which will rotate vector "from" into
-     * vector "to". from and to do not have to be the same length.
-     */
-    public void set(Vec3f from, Vec3f to) {
-        Vec3f axis = from.cross(to);
-        if (axis.lengthSquared() < EPSILON) {
-            init();
-            return;
-        }
-        float dotp = from.dot(to);
-        float denom = from.length() * to.length();
-        if (denom < EPSILON) {
-            init();
-            return;
-        }
-        dotp /= denom;
-        set(axis, (float) Math.acos(dotp));
-    }
-
-    /**
      * Returns angle (in radians) and mutates the given vector to be
      * the axis.
      */
-    public float get(Vec3f axis) {
+    public float get(Vector3f axis) {
         // FIXME: Is this numerically stable? Is there a better way to
         // extract the angle from a quaternion?
         // NOTE: remove (float) to illustrate compiler bug
@@ -194,8 +176,8 @@ public class Rotf extends Quat4f {
      */
     public void rotateVector(Vec3f src, Vec3f dest) {
         Vec3f qVec = new Vec3f(x, y, z);
-        Vec3f qCrossX = qVec.cross(src);
-        Vec3f qCrossXCrossQ = qCrossX.cross(qVec);
+        Vec3f qCrossX = cross(qVec, src);
+        Vec3f qCrossXCrossQ = cross(qCrossX, qVec);
         qCrossX.scale(2.0f * w);
         qCrossXCrossQ.scale(-2.0f);
         dest.add(src, qCrossX);
@@ -213,24 +195,5 @@ public class Rotf extends Quat4f {
 
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ", " + w + ")";
-    }
-
-    private void setQ(int i, float val) {
-        switch (i) {
-            case 0:
-                w = val;
-                break;
-            case 1:
-                x = val;
-                break;
-            case 2:
-                y = val;
-                break;
-            case 3:
-                z = val;
-                break;
-            default:
-                throw new IndexOutOfBoundsException();
-        }
     }
 }
