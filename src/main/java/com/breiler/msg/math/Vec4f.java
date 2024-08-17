@@ -45,10 +45,6 @@ public class Vec4f extends Vector4f {
 
   public Vec4f() {}
 
-  public Vec4f(Vector4f arg) {
-    set(arg);
-  }
-
   public Vec4f(float x, float y, float z, float w) {
     set(x, y, z, w);
   }
@@ -76,8 +72,4 @@ public class Vec4f extends Vector4f {
     }
   }
 
-
-  public String toString() {
-    return "(" + x + ", " + y + ", " + z + ", " + w + ")";
-  }
 }

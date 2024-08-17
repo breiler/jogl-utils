@@ -44,6 +44,7 @@ import com.breiler.msg.elements.CoordinateElement;
 import com.breiler.msg.elements.TextureCoordinateElement;
 import com.breiler.msg.elements.TextureElement;
 import com.breiler.msg.math.Mat4f;
+import com.breiler.msg.math.MathUtils;
 import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.PrimitiveVertex;
@@ -97,11 +98,9 @@ public class TriangleSet extends TriangleBasedShape {
             gl.glMatrixMode(GL.GL_TEXTURE);
             gl.glPushMatrix();
             if (gl.isExtensionAvailable("GL_VERSION_1_3")) {
-                gl.glLoadTransposeMatrixf(getTextureMatrix(tex).getRowMajorData(), 0);
+                gl.glLoadTransposeMatrixf(MathUtils.getRowMajorData(getTextureMatrix(tex)), 0);
             } else {
-                final float[] tmp = new float[16];
-                getTextureMatrix(tex).getColumnMajorData(tmp);
-                gl.glLoadMatrixf(tmp, 0);
+                gl.glLoadMatrixf(MathUtils.getColumnMajorData(getTextureMatrix(tex)), 0);
             }
             gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         } else if (haveTexCoords) {
@@ -206,12 +205,12 @@ public class TriangleSet extends TriangleBasedShape {
         textureMatrix.setIdentity();
         final TextureCoords coords = texture.getImageTexCoords();
         // Horizontal scale
-        textureMatrix.set(0, 0, coords.right() - coords.left());
+        textureMatrix.setElement(0, 0, coords.right() - coords.left());
         // Vertical scale (may be negative if texture needs to be flipped vertically)
         final float vertScale = coords.top() - coords.bottom();
-        textureMatrix.set(1, 1, vertScale);
-        textureMatrix.set(0, 3, coords.left());
-        textureMatrix.set(1, 3, coords.bottom());
+        textureMatrix.setElement(1, 1, vertScale);
+        textureMatrix.setElement(0, 3, coords.left());
+        textureMatrix.setElement(1, 3, coords.bottom());
         return textureMatrix;
     }
 }

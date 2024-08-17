@@ -37,21 +37,16 @@
 
 package com.breiler.msg.math;
 
+import javax.vecmath.Quat4f;
+import javax.vecmath.Vector3f;
+
 /**
  * Represents a rotation in 3D space with single-precision
  * components. Uses a quaternion as the internal representation.
  */
 
-public class Rotf {
+public class Rotf extends Quat4f {
     private static final float EPSILON = 1.0e-7f;
-
-    // Representation is a quaternion. Element 0 is the scalar part (=
-    // cos(theta/2)), elements 1..3 the imaginary/"vector" part (=
-    // sin(theta/2) * axis).
-    private float w;
-    private float x;
-    private float y;
-    private float z;
 
     /**
      * Default constructor initializes to the identity quaternion
@@ -64,7 +59,7 @@ public class Rotf {
      * Axis does not need to be normalized but must not be the zero
      * vector. Angle is in radians.
      */
-    public Rotf(Vec3f axis, float angle) {
+    public Rotf(Vector3f axis, float angle) {
         set(axis, angle);
     }
 
@@ -82,11 +77,11 @@ public class Rotf {
      * Axis does not need to be normalized but must not be the zero
      * vector. Angle is in radians.
      */
-    public void set(Vec3f axis, float angle) {
+    public void set(Vector3f axis, float angle) {
         float halfTheta = angle / 2.0f;
         w = (float) Math.cos(halfTheta);
         float sinHalfTheta = (float) Math.sin(halfTheta);
-        Vec3f realAxis = new Vec3f(axis);
+        Vector3f realAxis = new Vector3f(axis);
         realAxis.normalize();
         x = realAxis.getX() * sinHalfTheta;
         y = realAxis.getY() * sinHalfTheta;
@@ -172,64 +167,24 @@ public class Rotf {
         float q22 = y * y;
         float q33 = z * z;
         // Diagonal elements
-        mat.set(0, 0, q00 + q11 - q22 - q33);
-        mat.set(1, 1, q00 - q11 + q22 - q33);
-        mat.set(2, 2, q00 - q11 - q22 + q33);
+        mat.setElement(0, 0, q00 + q11 - q22 - q33);
+        mat.setElement(1, 1, q00 - q11 + q22 - q33);
+        mat.setElement(2, 2, q00 - q11 - q22 + q33);
         // 0,1 and 1,0 elements
         float q03 = w * z;
         float q12 = x * y;
-        mat.set(0, 1, 2.0f * (q12 - q03));
-        mat.set(1, 0, 2.0f * (q03 + q12));
+        mat.setElement(0, 1, 2.0f * (q12 - q03));
+        mat.setElement(1, 0, 2.0f * (q03 + q12));
         // 0,2 and 2,0 elements
         float q02 = w * y;
         float q13 = x * z;
-        mat.set(0, 2, 2.0f * (q02 + q13));
-        mat.set(2, 0, 2.0f * (q13 - q02));
+        mat.setElement(0, 2, 2.0f * (q02 + q13));
+        mat.setElement(2, 0, 2.0f * (q13 - q02));
         // 1,2 and 2,1 elements
         float q01 = w * x;
         float q23 = y * z;
-        mat.set(1, 2, 2.0f * (q23 - q01));
-        mat.set(2, 1, 2.0f * (q01 + q23));
-    }
-
-    /**
-     * Turns the upper left 3x3 of the passed matrix into a rotation.
-     * Implementation from Watt and Watt, <u>Advanced Animation and
-     * Rendering Techniques</u>.
-     *
-     * @see Mat4f#getRotation
-     */
-    public void fromMatrix(Mat4f mat) {
-        // FIXME: Should reimplement to follow Horn's advice of using
-        // eigenvector decomposition to handle roundoff error in given
-        // matrix.
-
-        float tr, s;
-        int i, j, k;
-
-        tr = mat.get(0, 0) + mat.get(1, 1) + mat.get(2, 2);
-        if (tr > 0.0) {
-            s = (float) Math.sqrt(tr + 1.0f);
-            w = s * 0.5f;
-            s = 0.5f / s;
-            x = (mat.get(2, 1) - mat.get(1, 2)) * s;
-            y = (mat.get(0, 2) - mat.get(2, 0)) * s;
-            z = (mat.get(1, 0) - mat.get(0, 1)) * s;
-        } else {
-            i = 0;
-            if (mat.get(1, 1) > mat.get(0, 0))
-                i = 1;
-            if (mat.get(2, 2) > mat.get(i, i))
-                i = 2;
-            j = (i + 1) % 3;
-            k = (j + 1) % 3;
-            s = (float) Math.sqrt((mat.get(i, i) - (mat.get(j, j) + mat.get(k, k))) + 1.0f);
-            setQ(i + 1, s * 0.5f);
-            s = 0.5f / s;
-            w = (mat.get(k, j) - mat.get(j, k)) * s;
-            setQ(j + 1, (mat.get(j, i) + mat.get(i, j)) * s);
-            setQ(k + 1, (mat.get(k, i) + mat.get(i, k)) * s);
-        }
+        mat.setElement(1, 2, 2.0f * (q23 - q01));
+        mat.setElement(2, 1, 2.0f * (q01 + q23));
     }
 
     /**

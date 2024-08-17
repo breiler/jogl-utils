@@ -41,6 +41,8 @@ import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.misc.State;
 import com.breiler.msg.misc.StateIndex;
 
+import javax.vecmath.Matrix4f;
+
 /** Represents the model matrix, which is the transformation applied
     to objects in the scene. */
 

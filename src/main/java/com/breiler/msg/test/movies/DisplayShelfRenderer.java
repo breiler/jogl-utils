@@ -72,7 +72,6 @@ import com.breiler.msg.collections.Vec3fCollection;
 import com.breiler.msg.collections.Vec4fCollection;
 import com.breiler.msg.math.Rotf;
 import com.breiler.msg.math.Vec3f;
-import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.Path;
 import com.breiler.msg.misc.SystemTime;
 import com.breiler.msg.nodes.Blend;
@@ -279,7 +278,7 @@ public class DisplayShelfRenderer implements GLEventListener {
 
       final Transform mirrorXform = new Transform();
       // Mirror vertically
-      mirrorXform.getTransform().set(1, 1, -1.0f);
+      mirrorXform.getTransform().setElement(1, 1, -1.0f);
       mirrorRoot.addChild(mirrorXform);
       // Assume we know what we're doing here with setting per-vertex
       // colors for each piece of geometry in one shot

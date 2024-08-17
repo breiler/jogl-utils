@@ -42,7 +42,6 @@ import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.Vec3f;
 
 import javax.vecmath.Vector2f;
-import javax.vecmath.Vector3f;
 
 public class OrthographicCamera extends Camera {
   private static final float DEFAULT_HEIGHT = 2.0f;
@@ -67,10 +66,10 @@ public class OrthographicCamera extends Camera {
 
       // This is a simplified version of the orthographic projection
       // matrix where it's symmetric about the origin
-      projMatrix.set(0, 0,  2.0f / width);
-      projMatrix.set(1, 1,  2.0f / height);
-      projMatrix.set(2, 2, -2.0f / deltaZ);
-      projMatrix.set(2, 3, -(zFar + zNear) / deltaZ);
+      projMatrix.setElement(0, 0,  2.0f / width);
+      projMatrix.setElement(1, 1,  2.0f / height);
+      projMatrix.setElement(2, 2, -2.0f / deltaZ);
+      projMatrix.setElement(2, 3, -(zFar + zNear) / deltaZ);
     }
 
     return projMatrix;

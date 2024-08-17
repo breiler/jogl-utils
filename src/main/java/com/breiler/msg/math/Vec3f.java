@@ -51,7 +51,7 @@ public class Vec3f extends Vector3f {
     public Vec3f() {
     }
 
-    public Vec3f(Vec3f arg) {
+    public Vec3f(Vector3f arg) {
         set(arg);
     }
 

@@ -38,6 +38,7 @@
 package com.breiler.msg.elements;
 
 import com.breiler.msg.math.Mat4f;
+import com.breiler.msg.math.MathUtils;
 import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
@@ -77,11 +78,9 @@ public class GLViewingMatrixElement extends ViewingMatrixElement {
     temp.mul(matrix, mdl);
     GL2 gl = GLU.getCurrentGL().getGL2();
     if (gl.isExtensionAvailable("GL_VERSION_1_3")) {
-        gl.glLoadTransposeMatrixf(temp.getRowMajorData(), 0);
+        gl.glLoadTransposeMatrixf(MathUtils.getRowMajorData(temp), 0);
     } else {
-        float[] tmp = new float[16];
-        temp.getColumnMajorData(tmp);
-        gl.glLoadMatrixf(tmp, 0);
+        gl.glLoadMatrixf(MathUtils.getColumnMajorData(temp), 0);
     }
   }
 }

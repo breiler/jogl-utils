@@ -72,12 +72,12 @@ public class PerspectiveCamera extends Camera {
       }
       
       float cotangent = (float) Math.cos(radians) / sine;
-      projMatrix.set(0, 0, cotangent / aspect);
-      projMatrix.set(1, 1, cotangent);
-      projMatrix.set(2, 2, -(zFar + zNear) / deltaZ);
-      projMatrix.set(3, 2, -1);
-      projMatrix.set(2, 3, -2 * zNear * zFar / deltaZ);
-      projMatrix.set(3, 3, 0);
+      projMatrix.setElement(0, 0, cotangent / aspect);
+      projMatrix.setElement(1, 1, cotangent);
+      projMatrix.setElement(2, 2, -(zFar + zNear) / deltaZ);
+      projMatrix.setElement(3, 2, -1);
+      projMatrix.setElement(2, 3, -2 * zNear * zFar / deltaZ);
+      projMatrix.setElement(3, 3, 0);
     }
 
     return projMatrix;

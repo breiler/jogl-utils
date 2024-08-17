@@ -38,9 +38,9 @@
 package com.breiler.msg.misc;
 
 import com.breiler.msg.math.Vec3f;
-import com.breiler.msg.math.Vec4f;
 
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 /** Represents a vertex on a primitive, including pieces of relevant
@@ -51,7 +51,7 @@ public class PrimitiveVertex implements Cloneable {
   private Vec3f coord;
   private Vector2f texCoord;
   private Vector4f color;
-  private Vec3f normal;
+  private Vector3f normal;
 
   public PrimitiveVertex() {}
 
@@ -68,7 +68,7 @@ public class PrimitiveVertex implements Cloneable {
         vtx.setColor(new Vector4f(color));
       }
       if (normal != null) {
-        vtx.setNormal(new Vec3f(normal));
+        vtx.setNormal(new Vector3f(normal));
       }
       return vtx;
     } catch (CloneNotSupportedException e) {
@@ -98,7 +98,7 @@ public class PrimitiveVertex implements Cloneable {
   public Vector4f getColor()                  { return color;       }
 
   /** Sets the normal in this PrimitiveVertex. Refers to the passed vector by reference. */
-  public void  setNormal(Vec3f normal)     { this.normal = normal; }
+  public void  setNormal(Vector3f normal)     { this.normal = normal; }
   /** Returns the normal in this PrimitiveVertex, or null if it is not known. */
-  public Vec3f getNormal()                 { return normal;       }
+  public Vector3f getNormal()                 { return normal;       }
 }

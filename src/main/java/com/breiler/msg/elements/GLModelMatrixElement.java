@@ -38,11 +38,11 @@
 package com.breiler.msg.elements;
 
 import com.breiler.msg.math.Mat4f;
+import com.breiler.msg.math.MathUtils;
 import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
-import javax.vecmath.Matrix4f;
 
 /** Represents the model matrix, which is the transformation applied
     to objects in the scene, and causes side-effects in OpenGL. */
@@ -87,11 +87,9 @@ public class GLModelMatrixElement extends ModelMatrixElement {
     Mat4f mat = ViewingMatrixElement.getInstance(state).getMatrix();
     GL2 gl = GLU.getCurrentGL().getGL2();
     if (gl.isExtensionAvailable("GL_VERSION_1_3")) {
-        gl.glLoadTransposeMatrixf(mat.getRowMajorData(), 0);
+        gl.glLoadTransposeMatrixf(MathUtils.getRowMajorData(mat), 0);
     } else {
-        float[] tmp = new float[16];
-        mat.getColumnMajorData(tmp);
-        gl.glLoadMatrixf(tmp, 0);
+        gl.glLoadMatrixf(MathUtils.getColumnMajorData(mat), 0);
     }
   }
 
@@ -99,11 +97,9 @@ public class GLModelMatrixElement extends ModelMatrixElement {
     super.multElt(matrix);
     GL2 gl = GLU.getCurrentGL().getGL2();
     if (gl.isExtensionAvailable("GL_VERSION_1_3")) {
-        gl.glMultTransposeMatrixf(matrix.getRowMajorData(), 0);
+        gl.glMultTransposeMatrixf(MathUtils.getRowMajorData(matrix), 0);
     } else {
-        float[] tmp = new float[16];
-        matrix.getColumnMajorData(tmp);
-        gl.glMultMatrixf(tmp, 0);
+        gl.glMultMatrixf(MathUtils.getColumnMajorData(matrix), 0);
     }
   }
 }
