@@ -37,7 +37,6 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.State;
 import com.breiler.msg.misc.StateIndex;
 import com.breiler.msg.nodes.Blend;

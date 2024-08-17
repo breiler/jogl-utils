@@ -45,36 +45,36 @@ import javax.vecmath.Vector3f;
 /** Represents a line in 3D space. */
 
 public class Line {
-  private final Vec3f point;
+  private final Vector3f point;
   /** Normalized */
-  private final Vec3f direction;
+  private final Vector3f direction;
   /** For computing projections along line */
-  private final Vec3f alongVec;
+  private final Vector3f alongVec;
 
   /** Default constructor initializes line to point (0, 0, 0) and
       direction (1, 0, 0) */
   public Line() {
-    point = new Vec3f(0, 0, 0);
-    direction = new Vec3f(1, 0, 0);
-    alongVec = new Vec3f();
+    point = new Vector3f(0, 0, 0);
+    direction = new Vector3f(1, 0, 0);
+    alongVec = new Vector3f();
     recalc();
   }
 
   /** Line goes in direction <b>direction</b> through the point
       <b>point</b>. <b>direction</b> does not need to be normalized but must
       not be the zero vector. */
-  public Line(Vec3f direction, Vec3f point) {
-    this.direction = new Vec3f(direction);
+  public Line(Vector3f direction, Vector3f point) {
+    this.direction = new Vector3f(direction);
     this.direction.normalize();
-    this.point = new Vec3f(point);
-    alongVec = new Vec3f();
+    this.point = new Vector3f(point);
+    alongVec = new Vector3f();
     recalc();
   }
 
   /** Setter does some work to maintain internal caches.
       <b>direction</b> does not need to be normalized but must not be
       the zero vector. */
-  public void setDirection(Vec3f direction) {
+  public void setDirection(Vector3f direction) {
     this.direction.set(direction);
     this.direction.normalize();
     recalc();
@@ -83,7 +83,7 @@ public class Line {
   /** Direction is normalized internally, so <b>direction</b> is not
       necessarily equal to <code>plane.setDirection(direction);
       plane.getDirection();</code> */
-  public Vec3f getDirection() {
+  public Vector3f getDirection() {
     return direction;
   }
 
@@ -93,7 +93,7 @@ public class Line {
     recalc();
   }
 
-  public Vec3f getPoint() {
+  public Vector3f getPoint() {
     return point;
   }
 

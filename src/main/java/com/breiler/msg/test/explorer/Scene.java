@@ -5,8 +5,6 @@ import com.breiler.msg.collections.Vec2fCollection;
 import com.breiler.msg.collections.Vec3fCollection;
 import com.breiler.msg.collections.Vec4fCollection;
 import com.breiler.msg.math.Rotf;
-import com.breiler.msg.math.Vec3f;
-import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.nodes.Camera;
 import com.breiler.msg.nodes.Color4;
 import com.breiler.msg.nodes.Coordinate3;
@@ -20,6 +18,7 @@ import com.breiler.msg.nodes.TextureCoordinate2;
 import com.breiler.msg.nodes.TriangleSet;
 
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 public class Scene {
@@ -49,11 +48,11 @@ public class Scene {
 
 
         Group object1 = createVertexObject();
-        object1.getTransform().setTranslation(new Vec3f(-1, -1, -0.5));
+        object1.getTransform().setTranslation(new Vector3f(-1, -1, -0.5f));
 
         Group object2 = createVertexObject();
-        object2.getTransform().setTranslation(new Vec3f(0, 0, -2));
-        object2.getTransform().setRotation(new Rotf(new Vec3f(0, 1, 0), (float) (Math.PI)))
+        object2.getTransform().setTranslation(new Vector3f(0, 0, -2));
+        object2.getTransform().setRotation(new Rotf(new Vector3f(0, 1, 0), (float) (Math.PI)))
                 .setScale(5);
 
 
@@ -80,13 +79,13 @@ public class Scene {
         final Coordinate3 coordNode = new Coordinate3();
         final Vec3fCollection coords = new Vec3fCollection();
         // First triangle
-        coords.add(new Vec3f(1, 1, 0));
-        coords.add(new Vec3f(-1, 1, 0));
-        coords.add(new Vec3f(-1, -1, 0));
+        coords.add(new Vector3f(1, 1, 0));
+        coords.add(new Vector3f(-1, 1, 0));
+        coords.add(new Vector3f(-1, -1, 0));
         // Second triangle
-        coords.add(new Vec3f(1, 1, 0));
-        coords.add(new Vec3f(-1, -1, 0));
-        coords.add(new Vec3f(1, -1, 0));
+        coords.add(new Vector3f(1, 1, 0));
+        coords.add(new Vector3f(-1, -1, 0));
+        coords.add(new Vector3f(1, -1, 0));
         coordNode.setData(coords);
         object1.addChild(coordNode);
 
@@ -135,10 +134,10 @@ public class Scene {
 
     void initCamera() {
         perspectiveCamera = new PerspectiveCamera();
-        perspectiveCamera.setPosition(new Vec3f(0, 0, 4));
+        perspectiveCamera.setPosition(new Vector3f(0, 0, 4));
 
         orthCamera = new OrthographicCamera();
-        orthCamera.setPosition(new Vec3f(0, 0, 10));
+        orthCamera.setPosition(new Vector3f(0, 0, 10));
         orthCamera.setHeight(20);
         camera = orthCamera;
         root.addChild(orthCamera);

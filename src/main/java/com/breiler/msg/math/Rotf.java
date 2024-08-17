@@ -174,10 +174,10 @@ public class Rotf extends Quat4f {
      * Horn's <u>Robot Vision</u>. NOTE: src and dest must be different
      * vectors.
      */
-    public void rotateVector(Vec3f src, Vec3f dest) {
-        Vec3f qVec = new Vec3f(x, y, z);
-        Vec3f qCrossX = cross(qVec, src);
-        Vec3f qCrossXCrossQ = cross(qCrossX, qVec);
+    public void rotateVector(Vector3f src, Vector3f dest) {
+        Vector3f qVec = new Vector3f(x, y, z);
+        Vector3f qCrossX = cross(qVec, src);
+        Vector3f qCrossXCrossQ = cross(qCrossX, qVec);
         qCrossX.scale(2.0f * w);
         qCrossXCrossQ.scale(-2.0f);
         dest.add(src, qCrossX);
@@ -187,8 +187,8 @@ public class Rotf extends Quat4f {
     /**
      * Rotate a vector by this quaternion, returning newly-allocated result.
      */
-    public Vec3f rotateVector(Vec3f src) {
-        Vec3f tmp = new Vec3f();
+    public Vector3f rotateVector(Vector3f src) {
+        Vector3f tmp = new Vector3f();
         rotateVector(src, tmp);
         return tmp;
     }

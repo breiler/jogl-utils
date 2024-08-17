@@ -46,10 +46,11 @@ import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
 import static com.breiler.msg.math.MathUtils.plus;
 import static com.breiler.msg.math.MathUtils.times;
-import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.misc.PickedPoint;
 import com.breiler.msg.misc.PrimitiveVertex;
 import com.breiler.msg.misc.TriangleCallback;
+
+import javax.vecmath.Vector3f;
 
 /** The abstract base class for all shapes in the scene graph which
     render themselves as a collection of triangles. */
@@ -75,7 +76,7 @@ public abstract class TriangleBasedShape extends Shape {
 
     // Temporaries
     final RayTriangleIntersection rti = new RayTriangleIntersection();
-    final Vec3f tuv = new Vec3f();
+    final Vector3f tuv = new Vector3f();
 
     // OK, ready to test
     generateTriangles(action, new TriangleCallback() {
@@ -100,7 +101,7 @@ public abstract class TriangleBasedShape extends Shape {
             float a = 1.0f - tuv.getY() - tuv.getZ();
             float b = tuv.getY();
             float c = tuv.getZ();
-            Vec3f loc = plus(plus(times(v0.getCoord(), a), times(v1.getCoord(), b)), times(v2.getCoord(), c));
+            Vector3f loc = plus(plus(times(v0.getCoord(), a), times(v1.getCoord(), b)), times(v2.getCoord(), c));
             p.setCoord(loc);
             p.setPath(action.getPath().copy());
             action.addPickedPoint(p, tuv.getX());

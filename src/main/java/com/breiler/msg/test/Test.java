@@ -51,8 +51,6 @@ import com.breiler.msg.actions.RayPickAction;
 import com.breiler.msg.collections.Vec2fCollection;
 import com.breiler.msg.collections.Vec3fCollection;
 import com.breiler.msg.collections.Vec4fCollection;
-import com.breiler.msg.math.Vec3f;
-import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.PickedPoint;
 import com.breiler.msg.nodes.Color4;
 import com.breiler.msg.nodes.Coordinate3;
@@ -68,6 +66,7 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.breiler.msg.nodes.PerspectiveCamera;
 
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 /** A very basic test of the Minimal Scene Graph library. */
@@ -98,18 +97,18 @@ public class Test {
     public void init(final GLAutoDrawable drawable) {
       root = new Group();
       final PerspectiveCamera cam = new PerspectiveCamera();
-      cam.setPosition(new Vec3f(0, 0, 2));
+      cam.setPosition(new Vector3f(0, 0, 2));
       root.addChild(cam);
       final Coordinate3 coordNode = new Coordinate3();
       final Vec3fCollection coords = new Vec3fCollection();
       // First triangle
-      coords.add(new Vec3f( 1,  1, 0));
-      coords.add(new Vec3f(-1,  1, 0));
-      coords.add(new Vec3f(-1, -1, 0));
+      coords.add(new Vector3f( 1,  1, 0));
+      coords.add(new Vector3f(-1,  1, 0));
+      coords.add(new Vector3f(-1, -1, 0));
       // Second triangle
-      coords.add(new Vec3f( 1,  1, 0));
-      coords.add(new Vec3f(-1, -1, 0));
-      coords.add(new Vec3f( 1, -1, 0));
+      coords.add(new Vector3f( 1,  1, 0));
+      coords.add(new Vector3f(-1, -1, 0));
+      coords.add(new Vector3f( 1, -1, 0));
       coordNode.setData(coords);
       root.addChild(coordNode);
 
@@ -146,7 +145,7 @@ public class Test {
 
       // Testing transforms
       final Transform xform = new Transform();
-      xform.getTransform().setTranslation(new Vec3f(2, -2, 0));
+      xform.getTransform().setTranslation(new Vector3f(2, -2, 0));
       //      xform.getTransform().setRotation(new Rotf(new Vec3f(0, 1, 0), (float) (-Math.PI / 4)));
       root.addChild(xform);
 

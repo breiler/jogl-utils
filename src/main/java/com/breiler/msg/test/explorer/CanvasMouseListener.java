@@ -2,7 +2,6 @@ package com.breiler.msg.test.explorer;
 
 import com.breiler.msg.actions.RayPickAction;
 import com.breiler.msg.math.Rotf;
-import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.nodes.Node;
 
 import javax.swing.SwingUtilities;

@@ -45,8 +45,6 @@ import com.breiler.msg.elements.TextureCoordinateElement;
 import com.breiler.msg.elements.TextureElement;
 import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
-import com.breiler.msg.math.Vec3f;
-import com.breiler.msg.math.Vec4f;
 import com.breiler.msg.misc.PrimitiveVertex;
 import com.breiler.msg.misc.State;
 import com.breiler.msg.misc.TriangleCallback;
@@ -58,6 +56,8 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 import java.nio.FloatBuffer;
 
 /**
@@ -150,18 +150,18 @@ public class TriangleSet extends TriangleBasedShape {
         final PrimitiveVertex v0 = new PrimitiveVertex();
         final PrimitiveVertex v1 = new PrimitiveVertex();
         final PrimitiveVertex v2 = new PrimitiveVertex();
-        v0.setCoord(new Vec3f());
-        v1.setCoord(new Vec3f());
-        v2.setCoord(new Vec3f());
+        v0.setCoord(new Vector3f());
+        v1.setCoord(new Vector3f());
+        v2.setCoord(new Vector3f());
         if (texCoords != null) {
             v0.setTexCoord(new Vector2f());
             v1.setTexCoord(new Vector2f());
             v2.setTexCoord(new Vector2f());
         }
         if (colors != null) {
-            v0.setColor(new Vec4f());
-            v1.setColor(new Vec4f());
-            v2.setColor(new Vec4f());
+            v0.setColor(new Vector4f());
+            v1.setColor(new Vector4f());
+            v2.setColor(new Vector4f());
         }
 
         int coordIdx = 0;

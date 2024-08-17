@@ -72,7 +72,6 @@ import com.breiler.msg.collections.Vec2fCollection;
 import com.breiler.msg.collections.Vec3fCollection;
 import com.breiler.msg.collections.Vec4fCollection;
 import com.breiler.msg.math.Rotf;
-import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.misc.Path;
 import com.breiler.msg.misc.SystemTime;
 import com.breiler.msg.nodes.Blend;
@@ -306,7 +305,7 @@ public class DisplayShelfRenderer implements GLEventListener {
         final TitleGraph graph = new TitleGraph(obj);
         titles.add(graph);
         computeCoords(graph.coords, DEFAULT_ASPECT_RATIO);
-        graph.xform.getTransform().setTranslation(new Vec3f(i, 0, 0));
+        graph.xform.getTransform().setTranslation(new Vector3f(i, 0, 0));
         final Group sep = graph.sep;
         sep.addChild(graph.xform);
         sep.addChild(graph.coords);
@@ -351,13 +350,13 @@ public class DisplayShelfRenderer implements GLEventListener {
       final Coordinate3 floorCoords = new Coordinate3();
       floorCoords.setData(new Vec3fCollection());
       // First triangle
-      floorCoords.getData().add(new Vec3f(maxx, 0, minz));
-      floorCoords.getData().add(new Vec3f(minx, 0, minz));
-      floorCoords.getData().add(new Vec3f(minx, 0, maxz));
+      floorCoords.getData().add(new Vector3f(maxx, 0, minz));
+      floorCoords.getData().add(new Vector3f(minx, 0, minz));
+      floorCoords.getData().add(new Vector3f(minx, 0, maxz));
       // Second triangle
-      floorCoords.getData().add(new Vec3f(maxx, 0, minz));
-      floorCoords.getData().add(new Vec3f(minx, 0, maxz));
-      floorCoords.getData().add(new Vec3f(maxx, 0, maxz));
+      floorCoords.getData().add(new Vector3f(maxx, 0, minz));
+      floorCoords.getData().add(new Vector3f(minx, 0, maxz));
+      floorCoords.getData().add(new Vector3f(maxx, 0, maxz));
       floorRoot.addChild(floorCoords);
       // Colors
       final Vector4f gray = new Vector4f(0.4f, 0.4f, 0.4f, 0.4f);
@@ -464,17 +463,17 @@ public class DisplayShelfRenderer implements GLEventListener {
     Vec3fCollection coords = coordNode.getData();
     if (coords == null) {
       coords = new Vec3fCollection();
-      final Vec3f zero = new Vec3f();
+      final Vector3f zero = new Vector3f();
       for (int i = 0; i < 6; i++) {
         coords.add(zero);
       }
       coordNode.setData(coords);
     }
     // Now compute the actual values
-    final Vec3f lowerLeft  = new Vec3f(-0.5f * DEFAULT_HEIGHT * aspectRatio, 0, 0);
-    final Vec3f lowerRight = new Vec3f( 0.5f * DEFAULT_HEIGHT * aspectRatio, 0, 0);
-    final Vec3f upperLeft  = new Vec3f(-0.5f * DEFAULT_HEIGHT * aspectRatio, DEFAULT_HEIGHT, 0);
-    final Vec3f upperRight = new Vec3f( 0.5f * DEFAULT_HEIGHT * aspectRatio, DEFAULT_HEIGHT, 0);
+    final Vector3f lowerLeft  = new Vector3f(-0.5f * DEFAULT_HEIGHT * aspectRatio, 0, 0);
+    final Vector3f lowerRight = new Vector3f( 0.5f * DEFAULT_HEIGHT * aspectRatio, 0, 0);
+    final Vector3f upperLeft  = new Vector3f(-0.5f * DEFAULT_HEIGHT * aspectRatio, DEFAULT_HEIGHT, 0);
+    final Vector3f upperRight = new Vector3f( 0.5f * DEFAULT_HEIGHT * aspectRatio, DEFAULT_HEIGHT, 0);
     // First triangle
     coords.set(0, upperRight);
     coords.set(1, upperLeft);
@@ -631,11 +630,11 @@ public class DisplayShelfRenderer implements GLEventListener {
     for (final TitleGraph graph : titles) {
       if (idx < firstIndex) {
         graph.xform.getTransform().setRotation(posAngle);
-        graph.xform.getTransform().setTranslation(new Vec3f(curPos, y, 0));
+        graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, 0));
         curPos += stackedSpacing;
       } else if (idx > secondIndex) {
         graph.xform.getTransform().setRotation(negAngle);
-        graph.xform.getTransform().setTranslation(new Vec3f(curPos, y, 0));
+        graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, 0));
         curPos += stackedSpacing;
       } else if (idx == firstIndex) {
         // Bump the position of this title
@@ -646,11 +645,11 @@ public class DisplayShelfRenderer implements GLEventListener {
 
         // Interpolate
         graph.xform.getTransform().setRotation(new Rotf(new Vector3f(0,1,0), alpha * angle));
-        graph.xform.getTransform().setTranslation(new Vec3f(curPos, y, (1.0f - alpha) * offset));
+        graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, (1.0f - alpha) * offset));
 
         // Now recompute the position of the camera
         // Aim to get the titles to fill a certain fraction of the vertical field of view
-        camera.setPosition(new Vec3f(cameraPos,
+        camera.setPosition(new Vector3f(cameraPos,
                                      currentY,
                                      currentZ));
 
@@ -659,7 +658,7 @@ public class DisplayShelfRenderer implements GLEventListener {
       } else {
         // Interpolate
         graph.xform.getTransform().setRotation(new Rotf(new Vector3f(0,1,0), (1.0f - alpha) * -angle));
-        graph.xform.getTransform().setTranslation(new Vec3f(curPos, y, alpha * offset));
+        graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, alpha * offset));
 
         curPos += stackedSpacing + alpha * (selectedSpacing - stackedSpacing);
       }

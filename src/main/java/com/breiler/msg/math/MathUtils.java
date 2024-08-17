@@ -2,6 +2,7 @@ package com.breiler.msg.math;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 public class MathUtils {
 
@@ -53,7 +54,7 @@ public class MathUtils {
      * transformations; i.e., is not a full transformation. NOTE: src
      * and dest must be different vectors.
      */
-    public static void xformPt(Matrix4f matrix, Vec3f src, Vec3f dest) {
+    public static void xformPt(Matrix4f matrix, Vector3f src, Vector3f dest) {
         for (int rc = 0; rc < 3; rc++) {
             float tmp = 0.0f;
             for (int cc = 0; cc < 3; cc++) {
@@ -80,6 +81,26 @@ public class MathUtils {
         }
     }
 
+    public static void setVectorElement(Vector4f vector, int element, float value) {
+        switch (element) {
+            case 0:
+                vector.setX(value);
+                break;
+            case 1:
+                vector.setY(value);
+                break;
+            case 2:
+                vector.setZ(value);
+                break;
+            case 3:
+                vector.setW(value);
+                break;
+            default:
+                throw new IndexOutOfBoundsException();
+        }
+    }
+
+
     /**
      * Gets the ith component, 0 &lt;= i &lt; 3
      */
@@ -96,11 +117,30 @@ public class MathUtils {
         }
     }
 
+
+    /**
+     * Gets the ith component, 0 &lt;= i &lt; 4
+     */
+    public static float getVectorElement(Vector4f vector, int element) {
+        switch (element) {
+            case 0:
+                return vector.getX();
+            case 1:
+                return vector.getY();
+            case 2:
+                return vector.getZ();
+            case 3:
+                return vector.getW();
+            default:
+                throw new IndexOutOfBoundsException();
+        }
+    }
+
     /**
      * Transforms src using only the upper left 3x3. NOTE: src and dest
      * must be different vectors.
      */
-    public static void xformDir(Matrix4f matrix, Vec3f src, Vec3f dest) {
+    public static void xformDir(Matrix4f matrix, Vector3f src, Vector3f dest) {
         for (int rc = 0; rc < 3; rc++) {
             float tmp = 0.0f;
             for (int cc = 0; cc < 3; cc++) {
@@ -115,8 +155,8 @@ public class MathUtils {
      * matrix.
      */
     public static Line xformLine(Matrix4f matrix, Line line) {
-        Vec3f pt = new Vec3f();
-        Vec3f dir = new Vec3f();
+        Vector3f pt = new Vector3f();
+        Vector3f dir = new Vector3f();
 
         MathUtils.xformPt(matrix, line.getPoint(), pt);
         MathUtils.xformDir(matrix, line.getDirection(), dir);
@@ -127,13 +167,13 @@ public class MathUtils {
      * Multiply a 4D vector by this matrix. NOTE: src and dest must be
      * different vectors.
      */
-    public static void xformVec(Matrix4f matrix, Vec4f src, Vec4f dest) {
+    public static void xformVec(Matrix4f matrix, Vector4f src, Vector4f dest) {
         for (int rc = 0; rc < 4; rc++) {
             float tmp = 0.0f;
             for (int cc = 0; cc < 4; cc++) {
-                tmp += matrix.getElement(rc, cc) * src.get(cc);
+                tmp += matrix.getElement(rc, cc) * getVectorElement(src, cc);
             }
-            dest.set(rc, tmp);
+            setVectorElement(dest, rc, tmp);
         }
     }
 
@@ -157,8 +197,8 @@ public class MathUtils {
         matrix.setElement(1, 2, matrix.getElement(2, 1));
         matrix.setElement(2, 1, t);
         // Transform negative translation by this
-        Vec3f negTrans = new Vec3f(-matrix.getElement(0, 3), -matrix.getElement(1, 3), -matrix.getElement(2, 3));
-        Vec3f trans = new Vec3f();
+        Vector3f negTrans = new Vector3f(-matrix.getElement(0, 3), -matrix.getElement(1, 3), -matrix.getElement(2, 3));
+        Vector3f trans = new Vector3f();
         MathUtils.xformDir(matrix, negTrans, trans);
         matrix.setElement(0, 3, trans.getX());
         matrix.setElement(1, 3, trans.getY());
@@ -169,8 +209,8 @@ public class MathUtils {
     /**
      * Returns this * val; creates new vector
      */
-    public static Vec3f times(Vector3f vector, float val) {
-        Vec3f tmp = new Vec3f(vector);
+    public static Vector3f times(Vector3f vector, float val) {
+        Vector3f tmp = new Vector3f(vector);
         tmp.scale(val);
         return tmp;
     }
@@ -178,8 +218,8 @@ public class MathUtils {
     /**
      * Returns vector1 + vector2; creates new vector
      */
-    public static Vec3f plus(Vector3f vector1, Vec3f vector2) {
-        Vec3f tmp = new Vec3f(vector1);
+    public static Vector3f plus(Vector3f vector1, Vector3f vector2) {
+        Vector3f tmp = new Vector3f(vector1);
         tmp.add(vector2);
         return tmp;
     }
@@ -187,8 +227,8 @@ public class MathUtils {
     /**
      * Returns this - vector2; creates new vector
      */
-    public static Vec3f minus(Vector3f vector1, Vector3f vector2) {
-        Vec3f tmp = new Vec3f(vector1);
+    public static Vector3f minus(Vector3f vector1, Vector3f vector2) {
+        Vector3f tmp = new Vector3f(vector1);
         tmp.sub(vector2);
         return tmp;
     }
@@ -197,8 +237,8 @@ public class MathUtils {
     /**
      * Returns this cross arg; creates new vector
      */
-    public static Vec3f cross(Vector3f vector1, Vector3f arg) {
-        Vec3f tmp = new Vec3f();
+    public static Vector3f cross(Vector3f vector1, Vector3f arg) {
+        Vector3f tmp = new Vector3f();
         tmp.cross(vector1, arg);
         return tmp;
     }

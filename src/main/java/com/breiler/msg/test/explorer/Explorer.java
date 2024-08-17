@@ -1,7 +1,6 @@
 package com.breiler.msg.test.explorer;
 
 import com.breiler.msg.math.Rotf;
-import com.breiler.msg.math.Vec3f;
 import com.breiler.msg.misc.FPSCounter;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -23,6 +22,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
+import javax.vecmath.Vector3f;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -109,7 +109,7 @@ public class Explorer extends JFrame implements GLEventListener, MouseListener {
         zSlider.setValue(Math.round(scene.getCamera().getPosition().getZ() * 100));
 
 
-        ChangeListener changeListener = e -> scene.getCamera().setPosition(new Vec3f(xSlider.getValue() / 100f, ySlider.getValue() / 100f, zSlider.getValue() / 100f));
+        ChangeListener changeListener = e -> scene.getCamera().setPosition(new Vector3f(xSlider.getValue() / 100f, ySlider.getValue() / 100f, zSlider.getValue() / 100f));
         xSlider.addChangeListener(changeListener);
         ySlider.addChangeListener(changeListener);
         zSlider.addChangeListener(changeListener);
@@ -118,17 +118,17 @@ public class Explorer extends JFrame implements GLEventListener, MouseListener {
         double PI2 = Math.PI * 2;
         int max = (int) Math.round(PI2 * 1000);
         JSlider rotXSlider = new JSlider(0, max);
-        rotXSlider.setValue(Math.round(scene.getCamera().getOrientation().get(new Vec3f(1, 0, 0)) * 1000));
+        rotXSlider.setValue(Math.round(scene.getCamera().getOrientation().get(new Vector3f(1, 0, 0)) * 1000));
         JSlider rotYSlider = new JSlider(0, max);
-        rotYSlider.setValue(Math.round(scene.getCamera().getOrientation().get(new Vec3f(0, 1, 0)) * 1000));
+        rotYSlider.setValue(Math.round(scene.getCamera().getOrientation().get(new Vector3f(0, 1, 0)) * 1000));
         JSlider rotZSlider = new JSlider(0, max);
-        rotZSlider.setValue(Math.round(scene.getCamera().getOrientation().get(new Vec3f(0, 0, 1)) * 1000));
+        rotZSlider.setValue(Math.round(scene.getCamera().getOrientation().get(new Vector3f(0, 0, 1)) * 1000));
 
         changeListener = e -> {
             System.out.println(rotXSlider.getValue() / 1000f);
-            Rotf rotX = new Rotf(new Vec3f(1, 0, 0), rotXSlider.getValue() / 1000f);
-            Rotf rotY = new Rotf(new Vec3f(0, 1, 0), rotYSlider.getValue() / 1000f);
-            Rotf rotZ = new Rotf(new Vec3f(0, 0, 1), rotZSlider.getValue() / 1000f);
+            Rotf rotX = new Rotf(new Vector3f(1, 0, 0), rotXSlider.getValue() / 1000f);
+            Rotf rotY = new Rotf(new Vector3f(0, 1, 0), rotYSlider.getValue() / 1000f);
+            Rotf rotZ = new Rotf(new Vector3f(0, 0, 1), rotZSlider.getValue() / 1000f);
 
             Rotf orientation = new Rotf();
             orientation.mul(rotX, rotY);
@@ -157,7 +157,7 @@ public class Explorer extends JFrame implements GLEventListener, MouseListener {
 
         scene.getCamera().addCameraListener(() -> {
             SwingUtilities.invokeLater(() -> {
-                float newXRot = scene.getCamera().getOrientation().get(new Vec3f(1f, 0, 0)) ;
+                float newXRot = scene.getCamera().getOrientation().get(new Vector3f(1f, 0, 0)) ;
                 System.out.println(newXRot + " " + rotXSlider.getValue());
             });
         });

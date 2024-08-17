@@ -37,8 +37,6 @@
 
 package com.breiler.msg.misc;
 
-import com.breiler.msg.math.Vec3f;
-
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -48,7 +46,7 @@ import javax.vecmath.Vector4f;
     coordinates. */
 
 public class PrimitiveVertex implements Cloneable {
-  private Vec3f coord;
+  private Vector3f coord;
   private Vector2f texCoord;
   private Vector4f color;
   private Vector3f normal;
@@ -59,7 +57,7 @@ public class PrimitiveVertex implements Cloneable {
     try {
       PrimitiveVertex vtx = (PrimitiveVertex) super.clone();
       if (coord != null) {
-        vtx.setCoord(new Vec3f(coord));
+        vtx.setCoord(new Vector3f(coord));
       }
       if (texCoord != null) {
         vtx.setTexCoord(new Vector2f(texCoord));
@@ -83,9 +81,9 @@ public class PrimitiveVertex implements Cloneable {
   }
 
   /** Sets the coordinate in this PrimitiveVertex. Refers to the passed vector by reference. */
-  public void  setCoord(Vec3f coord)       { this.coord = coord; }
+  public void  setCoord(Vector3f coord)       { this.coord = coord; }
   /** Returns the coordinate in this PrimitiveVertex, or null if it is not known. */
-  public Vec3f getCoord()                  { return coord;       }
+  public Vector3f getCoord()                  { return coord;       }
 
   /** Sets the texture coordinate in this PrimitiveVertex. Refers to the passed vector by reference. */
   public void  setTexCoord(Vector2f texCoord) { this.texCoord = texCoord; }

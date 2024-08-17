@@ -41,7 +41,6 @@ import com.breiler.msg.actions.Action;
 import com.breiler.msg.actions.GLRenderAction;
 import com.breiler.msg.elements.BlendElement;
 import com.breiler.msg.elements.GLBlendElement;
-import com.breiler.msg.math.Vec4f;
 
 import javax.vecmath.Vector4f;
 
