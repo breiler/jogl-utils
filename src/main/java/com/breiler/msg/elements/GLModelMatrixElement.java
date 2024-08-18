@@ -37,11 +37,12 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
 import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
+
+import javax.vecmath.Matrix4f;
 
 
 /** Represents the model matrix, which is the transformation applied
@@ -84,7 +85,7 @@ public class GLModelMatrixElement extends ModelMatrixElement {
     super.makeEltIdent();
     // Cause side-effects in OpenGL
     // Recompute the complete modelview matrix
-    Mat4f mat = ViewingMatrixElement.getInstance(state).getMatrix();
+    Matrix4f mat = ViewingMatrixElement.getInstance(state).getMatrix();
     GL2 gl = GLU.getCurrentGL().getGL2();
     if (gl.isExtensionAvailable("GL_VERSION_1_3")) {
         gl.glLoadTransposeMatrixf(MathUtils.getRowMajorData(mat), 0);
@@ -93,7 +94,7 @@ public class GLModelMatrixElement extends ModelMatrixElement {
     }
   }
 
-  public void multElt(Mat4f matrix) {
+  public void multElt(Matrix4f matrix) {
     super.multElt(matrix);
     GL2 gl = GLU.getCurrentGL().getGL2();
     if (gl.isExtensionAvailable("GL_VERSION_1_3")) {

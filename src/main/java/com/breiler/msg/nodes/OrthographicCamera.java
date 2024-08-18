@@ -38,9 +38,9 @@
 package com.breiler.msg.nodes;
 
 import com.breiler.msg.actions.GLRenderAction;
-import com.breiler.msg.math.Mat4f;
 import static com.breiler.msg.math.MathUtils.times;
 
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
@@ -49,7 +49,7 @@ public class OrthographicCamera extends Camera {
   // Amount the most recently set height differed from the default
   private float heightScale = 1.0f;
 
-  public Mat4f getProjectionMatrix() {
+  public Matrix4f getProjectionMatrix() {
     if (projDirty) {
       projMatrix.setIdentity();
       projDirty = false;

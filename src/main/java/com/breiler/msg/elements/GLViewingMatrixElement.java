@@ -37,7 +37,6 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
 import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
@@ -64,14 +63,14 @@ public class GLViewingMatrixElement extends ViewingMatrixElement {
 
   // State which we need in order to reset the modelview matrix
   private State state;
-  protected Mat4f temp = new Mat4f();
+  protected Matrix4f temp = new Matrix4f();
 
   public void push(State state) {
     super.push(state);
     this.state = state;
   }
 
-  public void setElt(Mat4f matrix) {
+  public void setElt(Matrix4f matrix) {
     super.setElt(matrix);
     // Must push the combined viewing and modelview matrices down to OpenGL
     Matrix4f mdl = ModelMatrixElement.getInstance(state).getMatrix();

@@ -39,6 +39,7 @@ package com.breiler.msg.math;
 
 import static com.breiler.msg.math.MathUtils.cross;
 
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
@@ -143,7 +144,7 @@ public class Rotf extends Quat4f {
      * mutates the upper-left 3x3 of the passed Mat4f. Implementation
      * from B. K. P. Horn's <u>Robot Vision</u> textbook.
      */
-    public void toMatrix(Mat4f mat) {
+    public void toMatrix(Matrix4f mat) {
         float q00 = w * w;
         float q11 = x * x;
         float q22 = y * y;

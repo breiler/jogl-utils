@@ -37,11 +37,12 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
 import com.breiler.msg.misc.State;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
+
+import javax.vecmath.Matrix4f;
 
 /** Represents the projection matrix, which transforms view-space
     coordinates into screen-space coordinates, and performs
@@ -64,7 +65,7 @@ public class GLProjectionMatrixElement extends ProjectionMatrixElement {
     super.push(state);
   }
 
-  public void setElt(Mat4f matrix) {
+  public void setElt(Matrix4f matrix) {
     super.setElt(matrix);
     GL2 gl = GLU.getCurrentGL().getGL2();
     gl.glMatrixMode(GL2.GL_PROJECTION);

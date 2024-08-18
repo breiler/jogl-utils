@@ -46,12 +46,13 @@ import com.breiler.msg.elements.GLViewingMatrixElement;
 import com.breiler.msg.elements.ModelMatrixElement;
 import com.breiler.msg.elements.ProjectionMatrixElement;
 import com.breiler.msg.elements.ViewingMatrixElement;
-import com.breiler.msg.math.Mat4f;
+
+import javax.vecmath.Matrix4f;
 
 /** Represents a generalized 4x4 matrix transformation. */
 
 public class Transform extends Node {
-  private final Mat4f transform;
+  private final Matrix4f transform;
   
   static {
     // Enable the elements this node affects for known actions
@@ -66,17 +67,17 @@ public class Transform extends Node {
   }
 
   public Transform() {
-    transform = new Mat4f();
+    transform = new Matrix4f();
     transform.setIdentity();
   }
 
   /** Sets the transformation in thie node. */
-  public void setTransform(Mat4f transform) {
+  public void setTransform(Matrix4f transform) {
     this.transform.set(transform);
   }
 
   /** Returns the transformation in thie node. */
-  public Mat4f getTransform() {
+  public Matrix4f getTransform() {
     return transform;
   }
 

@@ -47,11 +47,11 @@ import com.breiler.msg.elements.ModelMatrixElement;
 import com.breiler.msg.elements.ProjectionMatrixElement;
 import com.breiler.msg.elements.ViewingMatrixElement;
 import com.breiler.msg.math.Line;
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
 import static com.breiler.msg.math.MathUtils.minus;
 import com.breiler.msg.math.Rotf;
 
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -87,8 +87,8 @@ public abstract class Camera extends Node {
     private final Rotf orientation;
     protected boolean projDirty;
     protected boolean viewDirty;
-    protected Mat4f projMatrix;
-    protected Mat4f viewMatrix;
+    protected Matrix4f projMatrix;
+    protected Matrix4f viewMatrix;
     private float aspectRatio = 1.0f;
     private float nearDistance = 1.0f;
     private float farDistance = 100.0f;
@@ -97,8 +97,8 @@ public abstract class Camera extends Node {
         position = new Vector3f(0, 0, 1);
         orientation = new Rotf();
 
-        projMatrix = new Mat4f();
-        viewMatrix = new Mat4f();
+        projMatrix = new Matrix4f();
+        viewMatrix = new Matrix4f();
         projDirty = true;
         viewDirty = true;
     }
@@ -221,7 +221,7 @@ public abstract class Camera extends Node {
     /**
      * Returns the viewing matrix associated with this camera's parameters.
      */
-    public Mat4f getViewingMatrix() {
+    public Matrix4f getViewingMatrix() {
         if (viewDirty) {
             viewMatrix.setIdentity();
             viewDirty = false;
@@ -237,7 +237,7 @@ public abstract class Camera extends Node {
     /**
      * Returns the projection matrix associated with this camera's parameters.
      */
-    public abstract Mat4f getProjectionMatrix();
+    public abstract Matrix4f getProjectionMatrix();
 
     /**
      * Un-projects the given on-screen point to a line in 3D space
@@ -272,7 +272,7 @@ public abstract class Camera extends Node {
                 -getNearDistance(),
                 1);
         // Compute the cumulative view and projection matrices
-        Mat4f mat = new Mat4f();
+        Matrix4f mat = new Matrix4f();
         mat.mul(getProjectionMatrix(), getViewingMatrix());
         // Compute the inverse of this matrix
         mat.invert();

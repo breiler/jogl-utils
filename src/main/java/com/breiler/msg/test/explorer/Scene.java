@@ -4,6 +4,7 @@ import com.breiler.msg.actions.GLRenderAction;
 import com.breiler.msg.collections.Vec2fCollection;
 import com.breiler.msg.collections.Vec3fCollection;
 import com.breiler.msg.collections.Vec4fCollection;
+import static com.breiler.msg.math.MathUtils.rotate;
 import com.breiler.msg.math.Rotf;
 import com.breiler.msg.nodes.Camera;
 import com.breiler.msg.nodes.Color4;
@@ -52,7 +53,7 @@ public class Scene {
 
         Group object2 = createVertexObject();
         object2.getTransform().setTranslation(new Vector3f(0, 0, -2));
-        object2.getTransform().setRotation(new Rotf(new Vector3f(0, 1, 0), (float) (Math.PI)))
+        rotate(object2.getTransform(), new Rotf(new Vector3f(0, 1, 0), (float) (Math.PI)))
                 .setScale(5);
 
 

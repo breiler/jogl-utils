@@ -37,7 +37,6 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.misc.State;
 import com.breiler.msg.misc.StateIndex;
 
@@ -70,11 +69,11 @@ public class ModelMatrixElement extends Element {
   }
 
   // The matrix data
-  protected Mat4f matrix;
-  protected Mat4f temp = new Mat4f();
+  protected Matrix4f matrix;
+  protected Matrix4f temp = new Matrix4f();
 
   public ModelMatrixElement() {
-    matrix = new Mat4f();
+    matrix = new Matrix4f();
     matrix.setIdentity();
   }
 
@@ -87,7 +86,7 @@ public class ModelMatrixElement extends Element {
 
   /** Returns the current model matrix; callers should not mutate this
       directly but instead use the accessor methods to change it. */
-  public Mat4f getMatrix() {
+  public Matrix4f getMatrix() {
     return matrix;
   }
 
@@ -103,13 +102,13 @@ public class ModelMatrixElement extends Element {
   }
 
   /** Multiplies the current element by the given matrix. */
-  public static void mult(State state, Mat4f matrix) {
+  public static void mult(State state, Matrix4f matrix) {
     ModelMatrixElement elt = getInstance(state);
     elt.multElt(matrix);
   }
 
   /** Multiplies this element by the given matrix. */
-  public void multElt(Mat4f matrix) {
+  public void multElt(Matrix4f matrix) {
     temp.set(this.matrix);
     this.matrix.mul(temp, matrix);
   }

@@ -43,7 +43,6 @@ import com.breiler.msg.elements.ColorElement;
 import com.breiler.msg.elements.CoordinateElement;
 import com.breiler.msg.elements.TextureCoordinateElement;
 import com.breiler.msg.elements.TextureElement;
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
 import com.breiler.msg.misc.PrimitiveVertex;
 import com.breiler.msg.misc.State;
@@ -55,6 +54,7 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -69,7 +69,7 @@ import java.nio.FloatBuffer;
 public class TriangleSet extends TriangleBasedShape {
     // Helper routine for setting up a texture matrix to allow texture
     // coords in the scene graph to always be specified from (0..1)
-    private final Mat4f textureMatrix = new Mat4f();
+    private final Matrix4f textureMatrix = new Matrix4f();
 
     public void render(final GLRenderAction action) {
         final State state = action.getState();
@@ -201,7 +201,7 @@ public class TriangleSet extends TriangleBasedShape {
         }
     }
 
-    private Mat4f getTextureMatrix(final Texture texture) {
+    private Matrix4f getTextureMatrix(final Texture texture) {
         textureMatrix.setIdentity();
         final TextureCoords coords = texture.getImageTexCoords();
         // Horizontal scale

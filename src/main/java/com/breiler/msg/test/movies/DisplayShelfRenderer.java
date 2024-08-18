@@ -53,6 +53,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
+import static com.breiler.msg.math.MathUtils.rotate;
 import com.breiler.msg.misc.PickedPoint;
 import com.breiler.msg.nodes.Group;
 import com.jogamp.opengl.GL;
@@ -629,11 +630,11 @@ public class DisplayShelfRenderer implements GLEventListener {
     }
     for (final TitleGraph graph : titles) {
       if (idx < firstIndex) {
-        graph.xform.getTransform().setRotation(posAngle);
+        rotate(graph.xform.getTransform(), posAngle);
         graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, 0));
         curPos += stackedSpacing;
       } else if (idx > secondIndex) {
-        graph.xform.getTransform().setRotation(negAngle);
+        rotate(graph.xform.getTransform(), negAngle);
         graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, 0));
         curPos += stackedSpacing;
       } else if (idx == firstIndex) {
@@ -644,7 +645,7 @@ public class DisplayShelfRenderer implements GLEventListener {
         final float cameraPos = curPos + alpha * selectedSpacing;
 
         // Interpolate
-        graph.xform.getTransform().setRotation(new Rotf(new Vector3f(0,1,0), alpha * angle));
+        rotate(graph.xform.getTransform(), new Rotf(new Vector3f(0,1,0), alpha * angle));
         graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, (1.0f - alpha) * offset));
 
         // Now recompute the position of the camera
@@ -657,7 +658,7 @@ public class DisplayShelfRenderer implements GLEventListener {
         curPos += selectedSpacing;
       } else {
         // Interpolate
-        graph.xform.getTransform().setRotation(new Rotf(new Vector3f(0,1,0), (1.0f - alpha) * -angle));
+        rotate(graph.xform.getTransform(), new Rotf(new Vector3f(0,1,0), (1.0f - alpha) * -angle));
         graph.xform.getTransform().setTranslation(new Vector3f(curPos, y, alpha * offset));
 
         curPos += stackedSpacing + alpha * (selectedSpacing - stackedSpacing);

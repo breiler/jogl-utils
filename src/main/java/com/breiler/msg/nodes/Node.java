@@ -40,8 +40,8 @@ package com.breiler.msg.nodes;
 import com.breiler.msg.actions.Action;
 import com.breiler.msg.actions.GLRenderAction;
 import com.breiler.msg.actions.RayPickAction;
-import com.breiler.msg.math.Mat4f;
 
+import javax.vecmath.Matrix4f;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,12 +52,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Node implements NodeChangeListener {
     private final UUID uuid = UUID.randomUUID();
-    private final Mat4f transform;
+    private final Matrix4f transform;
     protected Set<NodeChangeListener> listeners = ConcurrentHashMap.newKeySet();
     private Node parent;
     private String name = getClass().getSimpleName();
     protected Node() {
-        transform = new Mat4f();
+        transform = new Matrix4f();
         transform.setIdentity();
     }
 
@@ -66,7 +66,7 @@ public abstract class Node implements NodeChangeListener {
      *
      * @return the nodes matrix
      */
-    public Mat4f getTransform() {
+    public Matrix4f getTransform() {
         return transform;
     }
 

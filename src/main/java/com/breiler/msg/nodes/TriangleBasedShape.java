@@ -42,7 +42,6 @@ import com.breiler.msg.actions.RayPickAction;
 import com.breiler.msg.elements.ModelMatrixElement;
 import com.breiler.msg.impl.RayTriangleIntersection;
 import com.breiler.msg.math.Line;
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.math.MathUtils;
 import static com.breiler.msg.math.MathUtils.plus;
 import static com.breiler.msg.math.MathUtils.times;
@@ -50,6 +49,7 @@ import com.breiler.msg.misc.PickedPoint;
 import com.breiler.msg.misc.PrimitiveVertex;
 import com.breiler.msg.misc.TriangleCallback;
 
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
 /** The abstract base class for all shapes in the scene graph which
@@ -68,7 +68,7 @@ public abstract class TriangleBasedShape extends Shape {
     // The RayPickAction holds the picking ray in world coordinates.
     // Transform this ray into local coordinates to do intersection testing
     // Fetch the current local-to-world matrix
-    Mat4f mat = new Mat4f(ModelMatrixElement.getInstance(action.getState()).getMatrix());
+    Matrix4f mat = new Matrix4f(ModelMatrixElement.getInstance(action.getState()).getMatrix());
     // Invert it to get the world-to-local matrix
     mat.invert();
     // Transform the RayPickAction's ray by this matrix

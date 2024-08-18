@@ -37,9 +37,10 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.misc.State;
 import com.breiler.msg.misc.StateIndex;
+
+import javax.vecmath.Matrix4f;
 
 /** Represents the projection matrix, which transforms view-space
     coordinates into screen-space coordinates. */
@@ -68,17 +69,17 @@ public class ProjectionMatrixElement extends Element {
   }
 
   // The matrix data
-  protected Mat4f matrix;
+  protected Matrix4f matrix;
 
   public ProjectionMatrixElement() {
-    matrix = new Mat4f();
+    matrix = new Matrix4f();
     matrix.setIdentity();
   }
   
   /** Returns the current projection matrix; callers should not mutate
       this directly but instead use the accessor methods to change
       it. */
-  public Mat4f getMatrix() {
+  public Matrix4f getMatrix() {
     return matrix;
   }
 
@@ -90,13 +91,13 @@ public class ProjectionMatrixElement extends Element {
   }
 
   /** Sets the projection matrix in the given state to the given one. */
-  public static void set(State state, Mat4f matrix) {
+  public static void set(State state, Matrix4f matrix) {
     ProjectionMatrixElement elt = getInstance(state);
     elt.setElt(matrix);
   }
 
   /** Sets the projection matrix in this element to the given one. */
-  public void setElt(Mat4f matrix) {
+  public void setElt(Matrix4f matrix) {
     this.matrix.set(matrix);
   }
 }

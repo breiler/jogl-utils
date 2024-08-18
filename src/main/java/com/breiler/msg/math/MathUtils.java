@@ -242,4 +242,15 @@ public class MathUtils {
         tmp.cross(vector1, arg);
         return tmp;
     }
+
+    /**
+     * Sets the rotation component of this matrix (i.e., the upper left
+     * 3x3) without touching any of the other parts of the matrix
+     *
+     * @return this matrix for fluid operations
+     */
+    public static Matrix4f rotate(Matrix4f matrix, Rotf rot) {
+        rot.toMatrix(matrix);
+        return matrix;
+    }
 }

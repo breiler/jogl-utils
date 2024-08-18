@@ -37,9 +37,10 @@
 
 package com.breiler.msg.elements;
 
-import com.breiler.msg.math.Mat4f;
 import com.breiler.msg.misc.State;
 import com.breiler.msg.misc.StateIndex;
+
+import javax.vecmath.Matrix4f;
 
 /** Represents the viewing matrix, which contains the transformation
     between the camera and the model. */
@@ -68,17 +69,17 @@ public class ViewingMatrixElement extends Element {
   }
 
   // The matrix data
-  protected Mat4f matrix;
+  protected Matrix4f matrix;
 
   public ViewingMatrixElement() {
-    matrix = new Mat4f();
+    matrix = new Matrix4f();
     matrix.setIdentity();
   }
   
   /** Returns the current viewing matrix; callers should not mutate
       this directly but instead use the accessor methods to change
       it. */
-  public Mat4f getMatrix() {
+  public Matrix4f getMatrix() {
     return matrix;
   }
 
@@ -90,13 +91,13 @@ public class ViewingMatrixElement extends Element {
   }
 
   /** Sets the viewing matrix in the given state to the given one. */
-  public static void set(State state, Mat4f matrix) {
+  public static void set(State state, Matrix4f matrix) {
     ViewingMatrixElement elt = getInstance(state);
     elt.setElt(matrix);
   }
 
   /** Sets the viewing matrix in this element to the given one. */
-  public void setElt(Mat4f matrix) {
+  public void setElt(Matrix4f matrix) {
     this.matrix.set(matrix);
   }
 }
